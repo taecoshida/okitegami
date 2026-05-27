@@ -24,31 +24,21 @@
       </p>
     </section>
 
-    <section class="entries" aria-label="entries">
-      <article class="entry">
-        <p class="date">2026-05-27</p>
-        <div class="image-placeholder">
-          <p>images/2026-05-27.jpg</p>
-        </div>
-        <h2>最初の床板</h2>
-        <p>
-          雨なので、Web空間をひとつ作る。これは投稿ではなく、置き手紙。
-        </p>
-      </article>
+    <section class="toolbar" aria-label="display options">
+      <p id="entry-count">entries</p>
+      <button id="toggle-order" type="button">古い順にする</button>
+    </section>
 
-      <article class="entry text-only">
-        <p class="date">template</p>
-        <h2>次のカード</h2>
-        <p>
-          画像がある日は画像を置く。言葉だけの日は、言葉だけ置く。
-          増やすときは、この article をコピーして日付と本文を書き換える。
-        </p>
-      </article>
+    <section id="entries" class="entries" aria-label="entries">
+      <p class="loading">置き手紙を読み込み中...</p>
     </section>
   </main>
 
   <footer>
     <p>okitegami / static web shelf</p>
   </footer>
+
+  <script src="entries.js"></script>
+  <script src="main.js"></script>
 </body>
 </html>
