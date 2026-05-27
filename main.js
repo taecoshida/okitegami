@@ -2,6 +2,8 @@ const entriesContainer = document.querySelector("#entries");
 const entryCount = document.querySelector("#entry-count");
 const toggleOrderButton = document.querySelector("#toggle-order");
 
+// entries.js は「新しいものを先頭に足す」運用にする。
+// そのため、表示順は日付ソートではなく、配列の順番をそのまま使う。
 let newestFirst = true;
 
 function escapeHtml(value) {
@@ -13,11 +15,8 @@ function escapeHtml(value) {
     .replaceAll("'", "&#039;");
 }
 
-function sortEntries(items) {
-  return [...items].sort((a, b) => {
-    const result = new Date(b.date) - new Date(a.date);
-    return newestFirst ? result : -result;
-  });
+function getDisplayEntries(items) {
+  return newestFirst ? [...items] : [...items].reverse();
 }
 
 function renderEntries() {
@@ -27,9 +26,9 @@ function renderEntries() {
     return;
   }
 
-  const sortedEntries = sortEntries(entries);
+  const displayEntries = getDisplayEntries(entries);
 
-  entriesContainer.innerHTML = sortedEntries.map((entry) => {
+  entriesContainer.innerHTML = displayEntries.map((entry) => {
     const title = escapeHtml(entry.title || "untitled");
     const date = escapeHtml(entry.date || "");
     const text = escapeHtml(entry.text || "");
