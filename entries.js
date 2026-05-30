@@ -2,7 +2,7 @@ const entries = [
   {
     date: "2026-05-30",
     title: "人参は、身体の位置を戻す",
-    image: "images/2026-05-30-carrot.svg",
+    image: "images/2026-05-30-carrot.png",
     text: `人参が良いのは、
 栄養だけではない。
 
