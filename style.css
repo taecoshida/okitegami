@@ -100,6 +100,61 @@ button:hover {
   filter: brightness(0.98);
 }
 
+a {
+  color: inherit;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+}
+
+.back-link {
+  margin-top: 24px;
+  color: var(--sub);
+  font-size: 0.9rem;
+}
+
+.shelf-link {
+  border-bottom: 1px solid var(--line);
+  padding: 0 0 24px;
+  margin: -4px 0 24px;
+}
+
+.shelf-link h2 {
+  margin: 0 0 8px;
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+}
+
+.shelf-link p {
+  margin: 0;
+}
+
+.longform {
+  padding: 28px 0 12px;
+  border-top: 1px solid var(--line);
+}
+
+.longform p {
+  margin: 0 0 1.4em;
+}
+
+.longform h2 {
+  margin: 2.4em 0 0.8em;
+  font-size: 1.25rem;
+}
+
+.longform blockquote {
+  margin: 2em 0;
+  padding: 0.2em 0 0.2em 1.2em;
+  border-left: 3px solid var(--line);
+  color: var(--sub);
+}
+
+.longform .note {
+  color: var(--sub);
+  font-size: 0.92rem;
+}
+
+
 .entries {
   display: grid;
   gap: 28px;
