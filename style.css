@@ -155,7 +155,8 @@ a {
 }
 
 .article-hero {
-  margin: 0 0 32px;
+  width: min(100%, 520px);
+  margin: 0 auto 32px;
 }
 
 .article-hero img {
