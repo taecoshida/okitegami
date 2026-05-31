@@ -20,13 +20,15 @@ function renderWeblogPosts() {
     const title = escapeHtml(post.title || "untitled");
     const description = escapeHtml(post.description || "");
     const href = escapeHtml(post.href || "#");
+    const image = post.image ? `<a href="${href}"><img src="${escapeHtml(post.image)}" alt="${title}"></a>` : "";
     const tags = Array.isArray(post.tags) && post.tags.length
       ? `<div class="tags">${post.tags.map((tag) => `<span class="tag">${escapeHtml(tag)}</span>`).join("")}</div>`
       : "";
 
     return `
-      <article class="entry no-image">
+      <article class="entry ${image ? "" : "no-image"}">
         <p class="date">${date}</p>
+        ${image}
         <h2><a href="${href}">${title}</a></h2>
         <p class="body-text">${description}</p>
         ${tags}
