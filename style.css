@@ -154,6 +154,26 @@ a {
   font-size: 0.92rem;
 }
 
+.article-hero {
+  margin: 0 0 32px;
+}
+
+.article-hero img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 22px;
+  border: 1px solid var(--line);
+  box-shadow: 0 16px 40px var(--shadow);
+}
+
+.article-hero figcaption {
+  margin-top: 10px;
+  color: var(--sub);
+  font-size: 0.85rem;
+  text-align: center;
+}
+
 
 .entries {
   display: grid;
