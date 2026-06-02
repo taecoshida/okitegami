@@ -10,11 +10,28 @@
   }
 
   .minimal-header {
-    padding: 72px 0 40px;
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(18em, 0.95fr);
+    gap: 48px;
+    align-items: end;
+    padding: 64px 0 44px;
+  }
+
+  .minimal-header .lead {
+    display: block;
+    max-width: 26em;
+    margin: 0 0 0.35em;
+    color: var(--sub);
+    font-size: 1.08rem;
+    line-height: 1.8;
+  }
+
+  .minimal-header .label {
+    display: none;
   }
 
   h1 {
-    font-size: clamp(5.8rem, 9vw, 8.6rem);
+    font-size: clamp(4.2rem, 6.4vw, 6.4rem);
   }
 
   .okitegami-shelf {
@@ -80,6 +97,11 @@
   main,
   footer {
     width: min(1280px, calc(100% - 96px));
+  }
+
+  .minimal-header {
+    grid-template-columns: minmax(0, 1fr) minmax(22em, 0.85fr);
+    gap: 72px;
   }
 
   .single-entry .entry {
