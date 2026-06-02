@@ -1,4 +1,12 @@
 const recipes = [
+{
+    date: "2026-06-02",
+    title: "鶏スープとキムチのおじや",
+    description: "残っていた鶏スープに、ご飯とキムチと卵を入れた。昨日の続きとして食べる。",
+    href: "2026-06-02-tori-soup-kimchi-ojiya.html",
+    image: "images/2026-06-02-tori-soup-kimchi-ojiya-card.png",
+    tags: ["recipe", "rice", "soup", "kimchi", "egg"]
+  },
   {
     date: "2026-06-01",
     title: "森チャーハン",
