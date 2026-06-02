@@ -110,6 +110,11 @@ h1 {
   font-size: 0.9rem;
 }
 
+.pager {
+  display: flex;
+  gap: 8px;
+}
+
 button {
   appearance: none;
   border: 1px solid var(--line);
@@ -124,6 +129,11 @@ button {
 
 button:hover {
   filter: brightness(0.98);
+}
+
+button:disabled {
+  cursor: default;
+  opacity: 0.45;
 }
 
 a {
@@ -223,24 +233,25 @@ a {
 }
 
 .entries {
-  display: flex;
-  gap: 20px;
-  overflow-x: auto;
-  overscroll-behavior-x: contain;
-  scroll-snap-type: x mandatory;
-  scroll-padding: 2px;
-  padding: 2px 0 28px;
-  scrollbar-width: thin;
+  display: grid;
+  gap: 28px;
+}
+
+.entries.single-entry {
+  justify-items: center;
 }
 
 .entry {
-  flex: 0 0 min(420px, 84vw);
-  scroll-snap-align: start;
+  width: 100%;
   padding: 24px;
   background: var(--card);
   border: 1px solid var(--line);
   border-radius: 22px;
   box-shadow: 0 16px 40px var(--shadow);
+}
+
+.single-entry .entry {
+  max-width: 560px;
 }
 
 .date {
