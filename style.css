@@ -31,6 +31,10 @@ footer {
   padding: 72px 0 36px;
 }
 
+.minimal-header {
+  padding: 56px 0 28px;
+}
+
 .label {
   margin: 0 0 8px;
   color: var(--sub);
@@ -51,6 +55,18 @@ h1 {
   margin: 24px 0 0;
   color: var(--sub);
   font-size: 1.05rem;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 .section-heading {
@@ -76,7 +92,7 @@ h1 {
 }
 
 .okitegami-shelf {
-  margin-bottom: 36px;
+  margin-bottom: 28px;
 }
 
 .intro {
@@ -105,9 +121,18 @@ h1 {
   color: var(--sub);
 }
 
+.quiet-toolbar {
+  justify-content: center;
+  margin: 18px 0 0;
+}
+
 .toolbar p {
   margin: 0;
   font-size: 0.9rem;
+}
+
+.entry-count {
+  display: none;
 }
 
 .pager {
@@ -119,16 +144,17 @@ button {
   appearance: none;
   border: 1px solid var(--line);
   border-radius: 999px;
-  background: var(--soft);
-  color: var(--ink);
-  padding: 8px 14px;
+  background: transparent;
+  color: var(--sub);
+  padding: 7px 13px;
   font: inherit;
-  font-size: 0.9rem;
+  font-size: 0.86rem;
   cursor: pointer;
 }
 
 button:hover {
-  filter: brightness(0.98);
+  background: var(--soft);
+  color: var(--ink);
 }
 
 button:disabled {
@@ -155,34 +181,39 @@ a {
   margin: 32px 0 0;
 }
 
+.quiet-links {
+  width: min(520px, 100%);
+  margin: 52px auto 0;
+}
+
 .shelf-link {
   display: grid;
-  gap: 10px;
-  min-height: 150px;
-  padding: 22px;
-  background: var(--soft);
+  gap: 6px;
+  min-height: auto;
+  padding: 14px 16px;
+  background: transparent;
   border: 1px solid var(--line);
-  border-radius: 22px;
+  border-radius: 999px;
   text-decoration: none;
 }
 
 .shelf-link:hover {
-  filter: brightness(0.985);
+  background: var(--soft);
 }
 
 .shelf-label {
   display: block;
   align-self: start;
-  font-size: clamp(1.25rem, 3vw, 2rem);
-  line-height: 1.15;
-  letter-spacing: -0.03em;
+  font-size: 0.95rem;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
 }
 
 .shelf-text {
   display: block;
   align-self: end;
   color: var(--sub);
-  font-size: 0.95rem;
+  font-size: 0.78rem;
 }
 
 .longform {
@@ -309,6 +340,7 @@ footer {
   padding: 56px 0 40px;
   color: var(--sub);
   font-size: 0.85rem;
+  text-align: center;
 }
 
 @media (min-width: 900px) {
@@ -329,6 +361,10 @@ footer {
     padding-top: 48px;
   }
 
+  .minimal-header {
+    padding: 44px 0 24px;
+  }
+
   .section-heading {
     grid-template-columns: 1fr;
     gap: 10px;
@@ -339,8 +375,17 @@ footer {
     flex-direction: column;
   }
 
+  .quiet-toolbar {
+    align-items: center;
+  }
+
   .portal-grid {
     grid-template-columns: 1fr;
+  }
+
+  .quiet-links {
+    width: min(260px, 100%);
+    margin-top: 42px;
   }
 
   .entry {
