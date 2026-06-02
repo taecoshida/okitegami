@@ -1,0 +1,57 @@
+.mobile-context {
+  display: none;
+}
+
+@media (max-width: 560px) {
+  .minimal-header {
+    padding: 48px 0 36px;
+  }
+
+  .mobile-context {
+    display: block;
+  }
+
+  .okitegami-shelf {
+    margin-bottom: 36px;
+  }
+
+  .quiet-toolbar {
+    align-items: flex-start;
+    justify-content: space-between;
+    margin: 18px 0 0;
+  }
+
+  .entry-count {
+    display: block;
+  }
+
+  button {
+    background: var(--soft);
+    color: var(--ink);
+    padding: 8px 14px;
+    font-size: 0.9rem;
+  }
+
+  .quiet-links {
+    width: 100%;
+    margin: 32px 0 0;
+  }
+
+  .shelf-link {
+    gap: 10px;
+    min-height: 150px;
+    padding: 22px;
+    background: var(--soft);
+    border-radius: 22px;
+  }
+
+  .shelf-label {
+    font-size: clamp(1.25rem, 3vw, 2rem);
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+  }
+
+  .shelf-text {
+    font-size: 0.95rem;
+  }
+}
