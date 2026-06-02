@@ -7,16 +7,21 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header class="site-header">
+  <header class="site-header minimal-header">
+    <!--
     <p class="label">small web shelf</p>
+    -->
     <h1>okitegami</h1>
+    <!--
     <p class="lead">
       画像と短い言葉を、流さずに置いておく場所。
     </p>
+    -->
   </header>
 
   <main>
     <section class="okitegami-shelf" aria-labelledby="okitegami-title">
+      <!--
       <div class="section-heading">
         <h2 id="okitegami-title">置き手紙</h2>
         <p>
@@ -24,29 +29,31 @@
           ボタンでめくれる小さな棚です。
         </p>
       </div>
+      -->
+      <h2 id="okitegami-title" class="visually-hidden">置き手紙</h2>
 
-      <section class="toolbar" aria-label="display options">
-        <p id="entry-count">entries</p>
+      <section id="entries" class="entries single-entry" aria-label="entries">
+        <p class="loading">置き手紙を読み込み中...</p>
+      </section>
+
+      <section class="toolbar quiet-toolbar" aria-label="display options">
+        <p id="entry-count" class="entry-count">entries</p>
         <div class="pager" aria-label="entry navigation">
           <button id="prev-entry" type="button">前へ</button>
           <button id="next-entry" type="button">次へ</button>
         </div>
       </section>
-
-      <section id="entries" class="entries single-entry" aria-label="entries">
-        <p class="loading">置き手紙を読み込み中...</p>
-      </section>
     </section>
 
-    <section class="portal-grid" aria-label="zaike shelves">
+    <section class="portal-grid quiet-links" aria-label="zaike shelves">
       <a class="shelf-link" href="weblog/index.html">
         <span class="shelf-label">zaike weblog</span>
-        <span class="shelf-text">置き手紙より長い観察を置いています。</span>
+        <span class="shelf-text">長い観察</span>
       </a>
 
       <a class="shelf-link" href="recipe/index.html">
         <span class="shelf-label">zaike recipe</span>
-        <span class="shelf-text">生活の中で再現できた手順を置いています。</span>
+        <span class="shelf-text">再現手順</span>
       </a>
     </section>
 
