@@ -301,11 +301,16 @@ a {
   margin-top: 0;
 }
 
-.entry img {
+.entry img,
+.entry video {
   display: block;
   width: 100%;
   height: auto;
   border-radius: 16px;
+}
+
+.entry video {
+  background: #111;
 }
 
 .entry.no-image h2 {
