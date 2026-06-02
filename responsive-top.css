@@ -2,6 +2,95 @@
   display: none;
 }
 
+@media (min-width: 900px) {
+  .site-header,
+  main,
+  footer {
+    width: min(1180px, calc(100% - 72px));
+  }
+
+  .minimal-header {
+    padding: 72px 0 40px;
+  }
+
+  h1 {
+    font-size: clamp(5.8rem, 9vw, 8.6rem);
+  }
+
+  .okitegami-shelf {
+    margin-bottom: 44px;
+  }
+
+  .single-entry .entry {
+    max-width: 920px;
+    padding: 40px;
+  }
+
+  .entry h2 {
+    font-size: 1.7rem;
+  }
+
+  .entry p {
+    font-size: 1.05rem;
+  }
+
+  .quiet-toolbar {
+    margin-top: 24px;
+  }
+
+  .pager {
+    gap: 12px;
+  }
+
+  button {
+    padding: 9px 18px;
+    font-size: 0.95rem;
+  }
+
+  .quiet-links {
+    width: min(920px, 100%);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+    margin-top: 72px;
+  }
+
+  .shelf-link {
+    min-height: 180px;
+    padding: 28px;
+    border-radius: 28px;
+    background: var(--soft);
+  }
+
+  .shelf-label {
+    font-size: 2rem;
+  }
+
+  .shelf-text {
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+
+  footer {
+    padding-top: 72px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .site-header,
+  main,
+  footer {
+    width: min(1280px, calc(100% - 96px));
+  }
+
+  .single-entry .entry {
+    max-width: 980px;
+  }
+
+  .quiet-links {
+    width: min(980px, 100%);
+  }
+}
+
 @media (max-width: 560px) {
   .minimal-header {
     padding: 48px 0 36px;
