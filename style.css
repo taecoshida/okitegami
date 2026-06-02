@@ -23,7 +23,7 @@ body {
 .site-header,
 main,
 footer {
-  width: min(760px, calc(100% - 40px));
+  width: min(960px, calc(100% - 40px));
   margin: 0 auto;
 }
 
@@ -53,11 +53,37 @@ h1 {
   font-size: 1.05rem;
 }
 
+.section-heading {
+  display: grid;
+  grid-template-columns: minmax(8em, 0.8fr) minmax(0, 1.6fr);
+  gap: 24px;
+  align-items: end;
+  border-top: 1px solid var(--line);
+  padding-top: 28px;
+  margin-bottom: 20px;
+}
+
+.section-heading h2 {
+  margin: 0;
+  font-size: clamp(1.6rem, 5vw, 3.4rem);
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+}
+
+.section-heading p {
+  margin: 0;
+  color: var(--sub);
+}
+
+.okitegami-shelf {
+  margin-bottom: 36px;
+}
+
 .intro {
   border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
   padding: 28px 0;
-  margin-bottom: 24px;
+  margin-top: 36px;
 }
 
 .intro h2 {
@@ -75,7 +101,7 @@ h1 {
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  margin: 0 0 28px;
+  margin: 0 0 18px;
   color: var(--sub);
 }
 
@@ -112,20 +138,41 @@ a {
   font-size: 0.9rem;
 }
 
+.portal-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin: 32px 0 0;
+}
+
 .shelf-link {
-  border-bottom: 1px solid var(--line);
-  padding: 0 0 24px;
-  margin: -4px 0 24px;
+  display: grid;
+  gap: 10px;
+  min-height: 150px;
+  padding: 22px;
+  background: var(--soft);
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  text-decoration: none;
 }
 
-.shelf-link h2 {
-  margin: 0 0 8px;
-  font-size: 1rem;
-  letter-spacing: 0.08em;
+.shelf-link:hover {
+  filter: brightness(0.985);
 }
 
-.shelf-link p {
-  margin: 0;
+.shelf-label {
+  display: block;
+  align-self: start;
+  font-size: clamp(1.25rem, 3vw, 2rem);
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+}
+
+.shelf-text {
+  display: block;
+  align-self: end;
+  color: var(--sub);
+  font-size: 0.95rem;
 }
 
 .longform {
@@ -175,13 +222,20 @@ a {
   text-align: center;
 }
 
-
 .entries {
-  display: grid;
-  gap: 28px;
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-padding: 2px;
+  padding: 2px 0 28px;
+  scrollbar-width: thin;
 }
 
 .entry {
+  flex: 0 0 min(420px, 84vw);
+  scroll-snap-align: start;
   padding: 24px;
   background: var(--card);
   border: 1px solid var(--line);
@@ -257,9 +311,18 @@ footer {
     padding-top: 48px;
   }
 
+  .section-heading {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
   .toolbar {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .portal-grid {
+    grid-template-columns: 1fr;
   }
 
   .entry {
