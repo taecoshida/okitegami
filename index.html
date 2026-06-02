@@ -21,16 +21,19 @@
         <h2 id="okitegami-title">置き手紙</h2>
         <p>
           今日の1枚、短い記録、あとで戻りたい言葉。
-          横に送って読める小さな棚です。
+          ボタンでめくれる小さな棚です。
         </p>
       </div>
 
       <section class="toolbar" aria-label="display options">
         <p id="entry-count">entries</p>
-        <button id="toggle-order" type="button">古い順にする</button>
+        <div class="pager" aria-label="entry navigation">
+          <button id="prev-entry" type="button">前へ</button>
+          <button id="next-entry" type="button">次へ</button>
+        </div>
       </section>
 
-      <section id="entries" class="entries" aria-label="entries">
+      <section id="entries" class="entries single-entry" aria-label="entries">
         <p class="loading">置き手紙を読み込み中...</p>
       </section>
     </section>
@@ -47,12 +50,14 @@
       </a>
     </section>
 
+    <!--
     <section class="intro">
       <h2>about</h2>
       <p>
         ここは、画像・短い言葉・生活の記録を、日付ごとの小さなカードとして置いていく場所です。
       </p>
     </section>
+    -->
   </main>
 
   <footer>
