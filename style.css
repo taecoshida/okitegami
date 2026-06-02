@@ -251,7 +251,7 @@ a {
 }
 
 .single-entry .entry {
-  max-width: 560px;
+  max-width: 720px;
 }
 
 .date {
@@ -311,6 +311,13 @@ footer {
   font-size: 0.85rem;
 }
 
+@media (min-width: 900px) {
+  .single-entry .entry {
+    max-width: 780px;
+    padding: 32px;
+  }
+}
+
 @media (max-width: 560px) {
   .site-header,
   main,
@@ -339,5 +346,9 @@ footer {
   .entry {
     padding: 18px;
     border-radius: 18px;
+  }
+
+  .single-entry .entry {
+    max-width: 100%;
   }
 }
