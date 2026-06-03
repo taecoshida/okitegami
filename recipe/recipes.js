@@ -1,5 +1,13 @@
 const recipes = [
-{
+  {
+    date: "2026-06-03",
+    title: "チキンステーキとにんじん",
+    description: "鶏を焼き、にんじんを添え、米で受ける。",
+    href: "2026-06-03-chicken-steak-carrot.html",
+    image: "images/2026-06-03-chicken-steak-carrot-card.png",
+    tags: ["recipe", "chicken", "carrot", "rice"]
+  },
+  {
     date: "2026-06-02",
     title: "鶏スープとキムチのおじや",
     description: "残っていた鶏スープに、ご飯とキムチと卵を入れた。昨日の続きとして食べる。",
