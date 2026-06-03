@@ -1,39 +1,33 @@
 #!/usr/bin/env python3
-"""Update zaike-feed/data/feed.json from weather and RSS sources.
+"""Update zaike-feed/data/feed.json from weather forecast data.
 
-This script is intentionally small and defensive:
+This script keeps zaike feed as a small weather antenna:
 - read zaike-feed/feeds.json
 - fetch enabled weather locations from Open-Meteo
-- fetch enabled RSS/Atom feeds with short timeouts
-- classify RSS entries by keywords
 - write zaike-feed/data/feed.json
 
-Bad, dead, or slow sources should not break or stall the whole workflow. They are
-reported as "保留" items so the source list can be tuned later.
+Bad, dead, or slow sources should not break the workflow. They are reported as
+"保留" items so the location settings can be tuned later.
 """
 
 from __future__ import annotations
 
 import hashlib
 import json
-import re
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Any
 from urllib.error import HTTPError, URLError
-from urllib.parse import quote, urlencode
+from urllib.parse import urlencode
 from urllib.request import Request, urlopen
-
-import feedparser
 
 ROOT = Path(__file__).resolve().parents[1]
 CONFIG_PATH = ROOT / "zaike-feed" / "feeds.json"
 OUTPUT_PATH = ROOT / "zaike-feed" / "data" / "feed.json"
 
 JST = timezone(timedelta(hours=9))
-FEED_TIMEOUT_SECONDS = 10
 WEATHER_TIMEOUT_SECONDS = 10
-MAX_ITEMS_PER_FEED = 12
+FORECAST_DAYS = 3
 
 WEATHER_CODES = {
     0: "快晴",
@@ -90,71 +84,16 @@ def item_hash(source: str, title: str, url: str) -> str:
     return hashlib.sha256(raw.encode("utf-8")).hexdigest()[:16]
 
 
-def clean_text(value: Any, limit: int = 280) -> str:
-    if value is None:
-        text = ""
-    else:
-        text = str(value)
-
-    text = re.sub(r"<[^>]+>", " ", text)
-    text = " ".join(text.split())
-
-    if len(text) <= limit:
-        return text
-    return text[: limit - 1] + "…"
-
-
-def score(text: str, keywords: list[str]) -> int:
-    lowered = text.lower()
-    return sum(1 for keyword in keywords if str(keyword).lower() in lowered)
-
-
-def classify(text: str, read_keywords: list[str], hold_keywords: list[str]) -> str:
-    if score(text, read_keywords) > 0:
-        return "読む"
-    if score(text, hold_keywords) > 0:
-        return "保留"
-    return "読まない"
-
-
-def published_value(entry: Any) -> str:
-    value = (
-        getattr(entry, "published", None)
-        or getattr(entry, "updated", None)
-        or getattr(entry, "created", None)
-        or ""
-    )
-    return clean_text(value, 80)
-
-
-def normalize_feed_url(url: str) -> str:
-    """Quote spaces and Japanese characters while keeping URL delimiters."""
-    return quote(url, safe=":/?&=%#;,+@!$'()*[]")
-
-
-def fetch_bytes(url: str, timeout: int, accept: str) -> bytes:
+def fetch_json(url: str, timeout: int) -> Any:
     request = Request(
         url,
         headers={
-            "User-Agent": "zaike-feed/0.2 (+https://github.com/taecoshida/okitegami)",
-            "Accept": accept,
+            "User-Agent": "zaike-feed/0.3 (+https://github.com/taecoshida/okitegami)",
+            "Accept": "application/json, */*",
         },
     )
     with urlopen(request, timeout=timeout) as response:
-        return response.read(2_000_000)
-
-
-def fetch_feed_bytes(url: str) -> bytes:
-    return fetch_bytes(
-        url,
-        FEED_TIMEOUT_SECONDS,
-        "application/rss+xml, application/atom+xml, application/xml, text/xml, */*",
-    )
-
-
-def fetch_json(url: str, timeout: int) -> Any:
-    content = fetch_bytes(url, timeout, "application/json, */*")
-    return json.loads(content.decode("utf-8"))
+        return json.loads(response.read(2_000_000).decode("utf-8"))
 
 
 def weather_label(max_temp: float | int | None, precipitation_sum: float | int | None) -> str:
@@ -196,9 +135,24 @@ def build_weather_url(location: dict[str, Any]) -> str:
             "precipitation_probability_max",
         ]),
         "timezone": location.get("timezone", "Asia/Tokyo"),
-        "forecast_days": 3,
+        "forecast_days": FORECAST_DAYS,
     }
     return "https://api.open-meteo.com/v1/forecast?" + urlencode(params)
+
+
+def error_item(location_name: str, url: str, message: str) -> dict[str, Any]:
+    title = f"{location_name} の天気取得を確認する"
+    return {
+        "id": item_hash("weather-error", title, url),
+        "title": title,
+        "source": "weather",
+        "url": url,
+        "published": now_iso(),
+        "class": "保留",
+        "memo": "天気の取得に失敗、または設定が不足しています。緯度・経度・接続状態を確認します。",
+        "summary": str(message)[:220],
+        "tags": ["weather", "hold"],
+    }
 
 
 def extract_weather_items(config: dict[str, Any]) -> list[dict[str, Any]]:
@@ -225,7 +179,7 @@ def extract_weather_items(config: dict[str, Any]) -> list[dict[str, Any]]:
             daily = data.get("daily", {})
             dates = daily.get("time", [])
 
-            for index, date in enumerate(dates[:3]):
+            for index, date in enumerate(dates[:FORECAST_DAYS]):
                 code = daily.get("weather_code", [None] * len(dates))[index]
                 max_temp = daily.get("temperature_2m_max", [None] * len(dates))[index]
                 min_temp = daily.get("temperature_2m_min", [None] * len(dates))[index]
@@ -254,7 +208,7 @@ def extract_weather_items(config: dict[str, Any]) -> list[dict[str, Any]]:
                     "tags": ["weather", weather_text, label],
                 })
 
-            print(f"weather ok: {name}: {min(len(dates), 3)} days", flush=True)
+            print(f"weather ok: {name}: {min(len(dates), FORECAST_DAYS)} days", flush=True)
         except (TimeoutError, HTTPError, URLError) as exc:
             items.append(error_item(name, url, repr(exc)))
             print(f"weather error: {name}: {exc!r}", flush=True)
@@ -265,98 +219,7 @@ def extract_weather_items(config: dict[str, Any]) -> list[dict[str, Any]]:
     return items
 
 
-def extract_entry(feed_name: str, entry: Any, read_keywords: list[str], hold_keywords: list[str]) -> dict[str, Any]:
-    title = clean_text(getattr(entry, "title", "untitled"), 180) or "untitled"
-    url = clean_text(getattr(entry, "link", ""), 500) or "#"
-    summary = clean_text(getattr(entry, "summary", ""), 220)
-    text = f"{title}\n{summary}"
-    label = classify(text, read_keywords, hold_keywords)
-
-    tags = []
-    for keyword in read_keywords + hold_keywords:
-        keyword = str(keyword)
-        if keyword.lower() in text.lower():
-            tags.append(keyword)
-    tags = list(dict.fromkeys(tags))[:6]
-
-    return {
-        "id": item_hash(feed_name, title, url),
-        "title": title,
-        "source": feed_name,
-        "url": url,
-        "published": published_value(entry),
-        "class": label,
-        "memo": "",
-        "summary": summary,
-        "tags": tags,
-    }
-
-
-def error_item(feed_name: str, url: str, message: str) -> dict[str, Any]:
-    title = f"{feed_name} の取得を確認する"
-    return {
-        "id": item_hash(feed_name, title, url),
-        "title": title,
-        "source": "zaike feed",
-        "url": url,
-        "published": now_iso(),
-        "class": "保留",
-        "memo": "取得に失敗、0件、またはタイムアウトしました。URLや設定の確認が必要です。",
-        "summary": clean_text(message, 220),
-        "tags": ["feed-check", "hold"],
-    }
-
-
-def fetch_feed_items(config: dict[str, Any]) -> list[dict[str, Any]]:
-    keywords = config.get("keywords", {})
-    read_keywords = keywords.get("read", [])
-    hold_keywords = keywords.get("hold", [])
-
-    items: list[dict[str, Any]] = []
-
-    for feed in config.get("feeds", []):
-        if not feed.get("enabled", False):
-            continue
-
-        name = str(feed.get("name") or feed.get("url") or "unknown")
-        url = feed.get("url")
-        if not url:
-            continue
-
-        normalized_url = normalize_feed_url(str(url))
-
-        try:
-            print(f"fetching feed: {name}", flush=True)
-            content = fetch_feed_bytes(normalized_url)
-            parsed = feedparser.parse(content)
-            entries = list(getattr(parsed, "entries", []))
-
-            if not entries:
-                bozo_message = clean_text(getattr(parsed, "bozo_exception", "no entries"), 220)
-                items.append(error_item(name, normalized_url, bozo_message or "no entries"))
-                print(f"feed warning: {name}: no entries", flush=True)
-                continue
-
-            for entry in entries[:MAX_ITEMS_PER_FEED]:
-                items.append(extract_entry(name, entry, read_keywords, hold_keywords))
-
-            print(f"feed ok: {name}: {min(len(entries), MAX_ITEMS_PER_FEED)} items", flush=True)
-        except (TimeoutError, HTTPError, URLError) as exc:
-            items.append(error_item(name, normalized_url, repr(exc)))
-            print(f"feed error: {name}: {exc!r}", flush=True)
-        except Exception as exc:  # Keep one bad feed from breaking the shelf.
-            items.append(error_item(name, normalized_url, repr(exc)))
-            print(f"feed error: {name}: {exc!r}", flush=True)
-
-    return items
-
-
-def fetch_items(config: dict[str, Any]) -> list[dict[str, Any]]:
-    items = []
-    items.extend(extract_weather_items(config))
-    items.extend(fetch_feed_items(config))
-
-    # Deduplicate while preserving order.
+def deduplicate_items(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
     seen = set()
     unique_items = []
     for item in items:
@@ -364,19 +227,15 @@ def fetch_items(config: dict[str, Any]) -> list[dict[str, Any]]:
             continue
         seen.add(item["id"])
         unique_items.append(item)
-
     return unique_items
 
 
 def main() -> None:
-    config = load_json(CONFIG_PATH, {"feeds": [], "keywords": {}})
+    config = load_json(CONFIG_PATH, {"weather": {}})
     existing = load_json(OUTPUT_PATH, {"items": []})
-    fetched_items = fetch_items(config)
+    fetched_items = deduplicate_items(extract_weather_items(config))
 
-    if fetched_items:
-        items = fetched_items
-    else:
-        items = existing.get("items", [])
+    items = fetched_items if fetched_items else existing.get("items", [])
 
     output = {
         "generated_at": now_iso(),
