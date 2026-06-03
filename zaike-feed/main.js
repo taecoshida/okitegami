@@ -4,6 +4,7 @@ const filterButtons = document.querySelectorAll(".filter-button");
 
 let items = [];
 let activeFilter = "all";
+let generatedAt = "";
 
 function escapeHtml(value) {
   return String(value ?? "")
@@ -22,6 +23,19 @@ function formatDate(value) {
     year: "numeric",
     month: "2-digit",
     day: "2-digit",
+  });
+}
+
+function formatDateTime(value) {
+  if (!value) return "更新時刻不明";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return value;
+  return date.toLocaleString("ja-JP", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
   });
 }
 
@@ -44,6 +58,7 @@ function renderSummary() {
   });
 
   feedSummary.innerHTML = `
+    <span class="summary-pill">updated: ${escapeHtml(formatDateTime(generatedAt))}</span>
     <span class="summary-pill">all: ${counts.all}</span>
     <span class="summary-pill">読む: ${counts["読む"]}</span>
     <span class="summary-pill">保留: ${counts["保留"]}</span>
@@ -105,10 +120,11 @@ async function loadFeed() {
     if (!response.ok) throw new Error(`feed.json could not be loaded: ${response.status}`);
 
     const data = await response.json();
+    generatedAt = data.generated_at || "";
     items = Array.isArray(data.items) ? data.items : [];
     renderItems();
   } catch (error) {
-    feedSummary.textContent = "feedを読み込めませんでした。";
+    feedSummary.textContent = "天気を読み込めませんでした。";
     feedList.innerHTML = `<p class="error">${escapeHtml(error.message)}</p>`;
   }
 }
