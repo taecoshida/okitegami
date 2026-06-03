@@ -6,8 +6,19 @@
   <title>okitegami</title>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="responsive-top.css">
+  <link rel="stylesheet" href="top-weather.css">
 </head>
 <body>
+  <aside id="top-weather" class="top-weather" aria-label="今日の天気">
+    <a class="top-weather-card" href="zaike-feed/index.html" aria-label="天気を読み込み中">
+      <span class="top-weather-icon" aria-hidden="true">○</span>
+      <span class="top-weather-main">
+        <span class="top-weather-title">天気を取得中</span>
+        <span class="top-weather-detail">local weather</span>
+      </span>
+    </a>
+  </aside>
+
   <header class="site-header minimal-header">
     <p class="label mobile-context">small web shelf</p>
     <h1>okitegami</h1>
@@ -78,5 +89,6 @@
 
   <script src="entries.js"></script>
   <script src="main.js"></script>
+  <script src="top-weather.js"></script>
 </body>
 </html>
