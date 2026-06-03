@@ -96,10 +96,13 @@ def fetch_json(url: str, timeout: int) -> Any:
         return json.loads(response.read(2_000_000).decode("utf-8"))
 
 
-def weather_label(max_temp: float | int | None, precipitation_sum: float | int | None) -> str:
-    if precipitation_sum is not None and float(precipitation_sum) >= 5:
-        return "保留"
-    if max_temp is not None and float(max_temp) >= 32:
+def weather_label(max_temp: Any, precipitation_sum: Any) -> str:
+    try:
+        if precipitation_sum is not None and float(precipitation_sum) >= 5:
+            return "保留"
+        if max_temp is not None and float(max_temp) >= 32:
+            return "保留"
+    except (TypeError, ValueError):
         return "保留"
     return "読む"
 
@@ -121,6 +124,14 @@ def format_weather_number(value: Any, unit: str) -> str:
         return f"{number:.1f}{unit}"
     except (TypeError, ValueError):
         return f"{value}{unit}"
+
+
+def list_value(values: Any, index: int, default: Any = None) -> Any:
+    if not isinstance(values, list):
+        return default
+    if index < 0 or index >= len(values):
+        return default
+    return values[index]
 
 
 def build_weather_url(location: dict[str, Any]) -> str:
@@ -178,13 +189,16 @@ def extract_weather_items(config: dict[str, Any]) -> list[dict[str, Any]]:
             data = fetch_json(url, WEATHER_TIMEOUT_SECONDS)
             daily = data.get("daily", {})
             dates = daily.get("time", [])
+            if not isinstance(dates, list) or not dates:
+                items.append(error_item(name, url, "daily.time が空です。"))
+                continue
 
             for index, date in enumerate(dates[:FORECAST_DAYS]):
-                code = daily.get("weather_code", [None] * len(dates))[index]
-                max_temp = daily.get("temperature_2m_max", [None] * len(dates))[index]
-                min_temp = daily.get("temperature_2m_min", [None] * len(dates))[index]
-                precipitation = daily.get("precipitation_sum", [None] * len(dates))[index]
-                probability = daily.get("precipitation_probability_max", [None] * len(dates))[index]
+                code = list_value(daily.get("weather_code"), index)
+                max_temp = list_value(daily.get("temperature_2m_max"), index)
+                min_temp = list_value(daily.get("temperature_2m_min"), index)
+                precipitation = list_value(daily.get("precipitation_sum"), index)
+                probability = list_value(daily.get("precipitation_probability_max"), index)
 
                 weather_text = weather_code_label(code)
                 title = f"{name}: {date} の天気 — {weather_text}"
@@ -201,7 +215,7 @@ def extract_weather_items(config: dict[str, Any]) -> list[dict[str, Any]]:
                     "title": title,
                     "source": "weather",
                     "url": url,
-                    "published": date,
+                    "published": str(date),
                     "class": label,
                     "memo": "生活シーケンス用の外界条件。外出・洗濯・買い物・作業場所の判断に使う。",
                     "summary": summary,
