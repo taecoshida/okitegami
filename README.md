@@ -51,12 +51,12 @@ okitegami/
 
 ## zaike feed
 
-`zaike-feed/` は、資源・エネルギー・研究開発・制度資料の更新を薄く受信するための棚です。
+`zaike-feed/` は、天気を生活判断に使える形で置いておくための小さな外界アンテナです。
 
 - 表示：`zaike-feed/index.html`
 - データ：`zaike-feed/data/feed.json`
-- RSS設定：`zaike-feed/feeds.json`
+- 設定：`zaike-feed/feeds.json`
 - 更新スクリプト：`scripts/update_zaike_feed.py`
 - 手動更新：GitHub Actions の `Update zaike feed`
 
-RSSを追加するときは、`zaike-feed/feeds.json` にURLを入れて `enabled: true` にします。
+場所を変えるときは、`zaike-feed/feeds.json` の `weather.locations` にある緯度・経度を書き換えます。
