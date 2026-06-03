@@ -20,9 +20,6 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Install dependencies
-        run: pip install feedparser
-
       - name: Update zaike feed
         timeout-minutes: 3
         run: python scripts/update_zaike_feed.py
