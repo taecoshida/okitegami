@@ -100,7 +100,8 @@ function renderItems() {
 
 async function loadFeed() {
   try {
-    const response = await fetch("data/feed.json", { cache: "no-store" });
+    const cacheBuster = new Date().toISOString().slice(0, 16);
+    const response = await fetch(`data/feed.json?v=${encodeURIComponent(cacheBuster)}`, { cache: "reload" });
     if (!response.ok) throw new Error(`feed.json could not be loaded: ${response.status}`);
 
     const data = await response.json();
