@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>zaike feed</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <p class="label">resources.receive()</p>
+    <h1>zaike feed</h1>
+    <p class="lead">
+      資源・エネルギー・研究開発・制度資料の更新を、薄く受信して置いておく棚。
+    </p>
+    <p class="back-link"><a href="../index.html">← okitegami</a></p>
+  </header>
+
+  <main>
+    <section class="feed-console" aria-labelledby="feed-title">
+      <div class="section-heading">
+        <h2 id="feed-title">今日の資料棚</h2>
+        <p>
+          RSSや更新情報を「読む / 保留 / 読まない」に分けるための、小さな外界アンテナです。
+        </p>
+      </div>
+
+      <section class="toolbar" aria-label="feed filters">
+        <button type="button" class="filter-button active" data-filter="all">all</button>
+        <button type="button" class="filter-button" data-filter="読む">読む</button>
+        <button type="button" class="filter-button" data-filter="保留">保留</button>
+        <button type="button" class="filter-button" data-filter="読まない">読まない</button>
+      </section>
+
+      <section id="feed-summary" class="feed-summary" aria-live="polite">
+        feedを読み込み中...
+      </section>
+
+      <section id="feed-list" class="feed-list" aria-label="feed items">
+        <p class="loading">feedを読み込み中...</p>
+      </section>
+    </section>
+  </main>
+
+  <footer>
+    <p>zaike feed / static resource antenna</p>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>
