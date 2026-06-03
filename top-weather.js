@@ -77,49 +77,50 @@ function topWeatherBuildUrl(location) {
   return `https://api.open-meteo.com/v1/forecast?${params.toString()}`;
 }
 
+function topWeatherCard(content, ariaLabel) {
+  return `
+    <div class="top-weather-card" role="status" aria-label="${topWeatherEscapeHtml(ariaLabel)}">
+      ${content}
+    </div>
+  `;
+}
+
 function topWeatherRender(state) {
   if (!topWeather) return;
 
-  const href = "zaike-feed/index.html";
   topWeather.classList.remove("is-loading", "is-error");
 
   if (state.status === "loading") {
     topWeather.classList.add("is-loading");
-    topWeather.innerHTML = `
-      <a class="top-weather-card" href="${href}" aria-label="天気を読み込み中">
-        <span class="top-weather-icon" aria-hidden="true">○</span>
-        <span class="top-weather-main">
-          <span class="top-weather-title">天気を取得中</span>
-          <span class="top-weather-detail">local weather</span>
-        </span>
-      </a>
-    `;
+    topWeather.innerHTML = topWeatherCard(`
+      <span class="top-weather-icon" aria-hidden="true">○</span>
+      <span class="top-weather-main">
+        <span class="top-weather-title">天気を取得中</span>
+        <span class="top-weather-detail">local weather</span>
+      </span>
+    `, "天気を読み込み中");
     return;
   }
 
   if (state.status === "error") {
     topWeather.classList.add("is-error");
-    topWeather.innerHTML = `
-      <a class="top-weather-card" href="${href}" aria-label="天気を確認する">
-        <span class="top-weather-icon" aria-hidden="true">○</span>
-        <span class="top-weather-main">
-          <span class="top-weather-title">天気未取得</span>
-          <span class="top-weather-detail">詳細を見る</span>
-        </span>
-      </a>
-    `;
+    topWeather.innerHTML = topWeatherCard(`
+      <span class="top-weather-icon" aria-hidden="true">○</span>
+      <span class="top-weather-main">
+        <span class="top-weather-title">天気未取得</span>
+        <span class="top-weather-detail">local weather</span>
+      </span>
+    `, "天気を取得できませんでした");
     return;
   }
 
-  topWeather.innerHTML = `
-    <a class="top-weather-card" href="${href}" aria-label="${topWeatherEscapeHtml(state.label)}、最高${topWeatherEscapeHtml(state.maxTemp)}、最低${topWeatherEscapeHtml(state.minTemp)}">
-      <span class="top-weather-icon" aria-hidden="true">${topWeatherEscapeHtml(state.icon)}</span>
-      <span class="top-weather-main">
-        <span class="top-weather-title">${topWeatherEscapeHtml(state.label)} / ${topWeatherEscapeHtml(state.maxTemp)}</span>
-        <span class="top-weather-detail">最低${topWeatherEscapeHtml(state.minTemp)}・雨${topWeatherEscapeHtml(state.precipitation)}</span>
-      </span>
-    </a>
-  `;
+  topWeather.innerHTML = topWeatherCard(`
+    <span class="top-weather-icon" aria-hidden="true">${topWeatherEscapeHtml(state.icon)}</span>
+    <span class="top-weather-main">
+      <span class="top-weather-title">${topWeatherEscapeHtml(state.label)} / ${topWeatherEscapeHtml(state.maxTemp)}</span>
+      <span class="top-weather-detail">最低${topWeatherEscapeHtml(state.minTemp)}・雨${topWeatherEscapeHtml(state.precipitation)}</span>
+    </span>
+  `, `${state.label}、最高${state.maxTemp}、最低${state.minTemp}`);
 }
 
 async function topWeatherLoad() {
