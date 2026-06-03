@@ -1,0 +1,25 @@
+{
+  "generated_at": "2026-06-03T00:00:00+09:00",
+  "items": [
+    {
+      "title": "zaike feed を設置した",
+      "source": "okitegami",
+      "url": "../index.html",
+      "published": "2026-06-03",
+      "class": "読む",
+      "memo": "RSSを読む前の、最初の棚札。資源・エネルギー・研究開発資料を薄く受信する場所。",
+      "summary": "まずは静的なfeed.jsonを表示する。次にRSS取得とGitHub Actions更新を足す。",
+      "tags": ["zaike feed", "resources", "antenna"]
+    },
+    {
+      "title": "RSS未設定の情報源は、いったん手動棚に置く",
+      "source": "zaike feed",
+      "url": "./README.md",
+      "published": "2026-06-03",
+      "class": "保留",
+      "memo": "NEDO・資源エネルギー庁・JOGMECなどは、RSS URLの確認後に feeds.json へ追加する。",
+      "summary": "最初は壊れない静的棚として使い、確認できたRSSから順に自動化する。",
+      "tags": ["RSS", "manual", "hold"]
+    }
+  ]
+}
