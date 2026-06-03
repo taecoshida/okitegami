@@ -8,10 +8,10 @@
 </head>
 <body>
   <header class="site-header">
-    <p class="label">resources.receive()</p>
+    <p class="label">weather.receive()</p>
     <h1>zaike feed</h1>
     <p class="lead">
-      資源・エネルギー・研究開発・制度資料の更新を、薄く受信して置いておく棚。
+      天気を、外出・洗濯・買い物・作業場所の判断に使える形で置いておく棚。
     </p>
     <p class="back-link"><a href="../index.html">← okitegami</a></p>
   </header>
@@ -19,9 +19,9 @@
   <main>
     <section class="feed-console" aria-labelledby="feed-title">
       <div class="section-heading">
-        <h2 id="feed-title">今日の資料棚</h2>
+        <h2 id="feed-title">今日の外界条件</h2>
         <p>
-          RSSや更新情報を「読む / 保留 / 読まない」に分けるための、小さな外界アンテナです。
+          天気予報を「読む / 保留 / 読まない」に分けるための、小さな生活アンテナです。
         </p>
       </div>
 
@@ -33,17 +33,17 @@
       </section>
 
       <section id="feed-summary" class="feed-summary" aria-live="polite">
-        feedを読み込み中...
+        天気を読み込み中...
       </section>
 
-      <section id="feed-list" class="feed-list" aria-label="feed items">
-        <p class="loading">feedを読み込み中...</p>
+      <section id="feed-list" class="feed-list" aria-label="weather items">
+        <p class="loading">天気を読み込み中...</p>
       </section>
     </section>
   </main>
 
   <footer>
-    <p>zaike feed / static resource antenna</p>
+    <p>zaike feed / static weather antenna</p>
   </footer>
 
   <script src="main.js"></script>
