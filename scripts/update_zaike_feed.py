@@ -1,23 +1,25 @@
 #!/usr/bin/env python3
 """Update zaike-feed/data/feed.json from RSS sources.
 
-This script is intentionally small:
+This script is intentionally small and defensive:
 - read zaike-feed/feeds.json
-- fetch enabled RSS feeds
+- fetch enabled RSS/Atom feeds
 - classify entries by keywords
 - write zaike-feed/data/feed.json
 
-If no feeds are enabled or no items are fetched, the existing seed item is kept
-and a generated_at timestamp is updated.
+Bad or dead feeds should not break the whole workflow. They are reported as
+"保留" items so the feed list can be tuned later.
 """
 
 from __future__ import annotations
 
 import hashlib
 import json
+import re
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Any
+from urllib.parse import quote
 
 import feedparser
 
@@ -51,8 +53,15 @@ def item_hash(source: str, title: str, url: str) -> str:
     return hashlib.sha256(raw.encode("utf-8")).hexdigest()[:16]
 
 
-def clean_text(value: str | None, limit: int = 280) -> str:
-    text = " ".join((value or "").split())
+def clean_text(value: Any, limit: int = 280) -> str:
+    if value is None:
+        text = ""
+    else:
+        text = str(value)
+
+    text = re.sub(r"<[^>]+>", " ", text)
+    text = " ".join(text.split())
+
     if len(text) <= limit:
         return text
     return text[: limit - 1] + "…"
@@ -60,7 +69,7 @@ def clean_text(value: str | None, limit: int = 280) -> str:
 
 def score(text: str, keywords: list[str]) -> int:
     lowered = text.lower()
-    return sum(1 for keyword in keywords if keyword.lower() in lowered)
+    return sum(1 for keyword in keywords if str(keyword).lower() in lowered)
 
 
 def classify(text: str, read_keywords: list[str], hold_keywords: list[str]) -> str:
@@ -72,23 +81,30 @@ def classify(text: str, read_keywords: list[str], hold_keywords: list[str]) -> s
 
 
 def published_value(entry: Any) -> str:
-    return (
+    value = (
         getattr(entry, "published", None)
         or getattr(entry, "updated", None)
         or getattr(entry, "created", None)
         or ""
     )
+    return clean_text(value, 80)
+
+
+def normalize_feed_url(url: str) -> str:
+    """Quote spaces and Japanese characters while keeping URL delimiters."""
+    return quote(url, safe=":/?&=%#;,+@!$'()*[]")
 
 
 def extract_entry(feed_name: str, entry: Any, read_keywords: list[str], hold_keywords: list[str]) -> dict[str, Any]:
-    title = clean_text(getattr(entry, "title", "untitled"), 180)
-    url = getattr(entry, "link", "") or "#"
+    title = clean_text(getattr(entry, "title", "untitled"), 180) or "untitled"
+    url = clean_text(getattr(entry, "link", ""), 500) or "#"
     summary = clean_text(getattr(entry, "summary", ""), 220)
     text = f"{title}\n{summary}"
     label = classify(text, read_keywords, hold_keywords)
 
     tags = []
     for keyword in read_keywords + hold_keywords:
+        keyword = str(keyword)
         if keyword.lower() in text.lower():
             tags.append(keyword)
     tags = list(dict.fromkeys(tags))[:6]
@@ -103,6 +119,21 @@ def extract_entry(feed_name: str, entry: Any, read_keywords: list[str], hold_key
         "memo": "",
         "summary": summary,
         "tags": tags,
+    }
+
+
+def error_item(feed_name: str, url: str, message: str) -> dict[str, Any]:
+    title = f"{feed_name} の取得を確認する"
+    return {
+        "id": item_hash(feed_name, title, url),
+        "title": title,
+        "source": "zaike feed",
+        "url": url,
+        "published": now_iso(),
+        "class": "保留",
+        "memo": "RSS/Atomの取得に失敗、または項目が0件でした。URL確認が必要です。",
+        "summary": clean_text(message, 220),
+        "tags": ["feed-check", "RSS", "hold"],
     }
 
 
@@ -122,9 +153,25 @@ def fetch_items(config: dict[str, Any]) -> list[dict[str, Any]]:
         if not url:
             continue
 
-        parsed = feedparser.parse(url)
-        for entry in parsed.entries[:20]:
-            items.append(extract_entry(name, entry, read_keywords, hold_keywords))
+        normalized_url = normalize_feed_url(str(url))
+
+        try:
+            parsed = feedparser.parse(normalized_url)
+            entries = list(getattr(parsed, "entries", []))
+
+            if not entries:
+                bozo_message = clean_text(getattr(parsed, "bozo_exception", "no entries"), 220)
+                items.append(error_item(str(name), normalized_url, bozo_message or "no entries"))
+                print(f"feed warning: {name}: no entries")
+                continue
+
+            for entry in entries[:20]:
+                items.append(extract_entry(str(name), entry, read_keywords, hold_keywords))
+
+            print(f"feed ok: {name}: {min(len(entries), 20)} items")
+        except Exception as exc:  # Keep one bad feed from breaking the shelf.
+            items.append(error_item(str(name), normalized_url, repr(exc)))
+            print(f"feed error: {name}: {exc!r}")
 
     # Deduplicate while preserving order.
     seen = set()
