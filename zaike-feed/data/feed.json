@@ -1,38 +1,80 @@
 {
-  "generated_at": "2026-06-03T19:10:00+09:00",
+  "generated_at": "2026-06-03T19:06:30+09:00",
   "items": [
     {
-      "id": "demo-read-20260603",
-      "title": "zaike feed 表示確認：読むカード",
+      "id": "6e6355199795d0ea",
+      "title": "NEDO press candidate の取得を確認する",
       "source": "zaike feed",
-      "url": "../index.html",
-      "published": "2026-06-03",
-      "class": "読む",
-      "memo": "画面・カード表示・フィルター動作を確認するためのデモカード。",
-      "summary": "まずはWeb上で棚が動くところを見る。RSS本命ソースの調整は、その後でよい。",
-      "tags": ["demo", "読む", "display"]
-    },
-    {
-      "id": "demo-hold-20260603",
-      "title": "公的資料RSSは保留扱いで調整する",
-      "source": "zaike feed",
-      "url": "./README.md",
-      "published": "2026-06-03",
+      "url": "https://www.nedo.go.jp/rss/press.xml",
+      "published": "2026-06-03T19:06:08+09:00",
       "class": "保留",
-      "memo": "NEDO・METI・JOGMECなどは、RSSが実在するかを確認してから入れる。",
-      "summary": "RSSがなければ、自動取得ではなく手動索引や軽いリンク棚として扱う。",
-      "tags": ["public", "RSS", "hold"]
+      "memo": "RSS/Atomの取得に失敗、0件、またはタイムアウトしました。URL確認が必要です。",
+      "summary": "",
+      "tags": [
+        "feed-check",
+        "RSS",
+        "hold"
+      ]
     },
     {
-      "id": "demo-no-20260603",
-      "title": "ノイズを増やす自動取得はしない",
+      "id": "987efec9b331e5ac",
+      "title": "METI news release candidate の取得を確認する",
       "source": "zaike feed",
-      "url": "./feeds.json",
-      "published": "2026-06-03",
-      "class": "読まない",
-      "memo": "取得できるから取る、ではなく、読む目的があるものだけ棚に入れる。",
-      "summary": "zaike feedはニュースアプリではなく、資料入口の認知の手すりとして育てる。",
-      "tags": ["noise", "読まない", "rule"]
+      "url": "https://www.meti.go.jp/rss/news_release.xml",
+      "published": "2026-06-03T19:06:19+09:00",
+      "class": "保留",
+      "memo": "RSS/Atomの取得に失敗、0件、またはタイムアウトしました。URL確認が必要です。",
+      "summary": "TimeoutError('The read operation timed out')",
+      "tags": [
+        "feed-check",
+        "RSS",
+        "hold"
+      ]
+    },
+    {
+      "id": "59eb6f4a2778baf1",
+      "title": "JOGMEC news candidate の取得を確認する",
+      "source": "zaike feed",
+      "url": "https://www.jogmec.go.jp/news/rss.xml",
+      "published": "2026-06-03T19:06:19+09:00",
+      "class": "保留",
+      "memo": "RSS/Atomの取得に失敗、0件、またはタイムアウトしました。URL確認が必要です。",
+      "summary": "",
+      "tags": [
+        "feed-check",
+        "RSS",
+        "hold"
+      ]
+    },
+    {
+      "id": "d3f0ac9ef6e618e4",
+      "title": "arXiv hydrogen energy の取得を確認する",
+      "source": "zaike feed",
+      "url": "https://export.arxiv.org/api/query?search_query=all:hydrogen%20AND%20all:energy&start=0&max_results=20&sortBy=submittedDate&sortOrder=descending",
+      "published": "2026-06-03T19:06:19+09:00",
+      "class": "保留",
+      "memo": "RSS/Atomの取得に失敗、0件、またはタイムアウトしました。URL確認が必要です。",
+      "summary": "",
+      "tags": [
+        "feed-check",
+        "RSS",
+        "hold"
+      ]
+    },
+    {
+      "id": "ffce98be29717938",
+      "title": "arXiv carbon capture storage の取得を確認する",
+      "source": "zaike feed",
+      "url": "https://export.arxiv.org/api/query?search_query=all:carbon%20AND%20all:capture%20AND%20all:storage&start=0&max_results=20&sortBy=submittedDate&sortOrder=descending",
+      "published": "2026-06-03T19:06:30+09:00",
+      "class": "保留",
+      "memo": "RSS/Atomの取得に失敗、0件、またはタイムアウトしました。URL確認が必要です。",
+      "summary": "TimeoutError('The read operation timed out')",
+      "tags": [
+        "feed-check",
+        "RSS",
+        "hold"
+      ]
     }
   ]
 }
