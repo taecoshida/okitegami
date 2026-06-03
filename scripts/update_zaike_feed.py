@@ -1,14 +1,15 @@
 #!/usr/bin/env python3
-"""Update zaike-feed/data/feed.json from RSS sources.
+"""Update zaike-feed/data/feed.json from weather and RSS sources.
 
 This script is intentionally small and defensive:
 - read zaike-feed/feeds.json
+- fetch enabled weather locations from Open-Meteo
 - fetch enabled RSS/Atom feeds with short timeouts
-- classify entries by keywords
+- classify RSS entries by keywords
 - write zaike-feed/data/feed.json
 
-Bad, dead, or slow feeds should not break or stall the whole workflow. They are
-reported as "保留" items so the feed list can be tuned later.
+Bad, dead, or slow sources should not break or stall the whole workflow. They are
+reported as "保留" items so the source list can be tuned later.
 """
 
 from __future__ import annotations
@@ -20,7 +21,7 @@ from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Any
 from urllib.error import HTTPError, URLError
-from urllib.parse import quote
+from urllib.parse import quote, urlencode
 from urllib.request import Request, urlopen
 
 import feedparser
@@ -31,7 +32,39 @@ OUTPUT_PATH = ROOT / "zaike-feed" / "data" / "feed.json"
 
 JST = timezone(timedelta(hours=9))
 FEED_TIMEOUT_SECONDS = 10
+WEATHER_TIMEOUT_SECONDS = 10
 MAX_ITEMS_PER_FEED = 12
+
+WEATHER_CODES = {
+    0: "快晴",
+    1: "晴れ",
+    2: "一部曇り",
+    3: "曇り",
+    45: "霧",
+    48: "霧氷",
+    51: "弱い霧雨",
+    53: "霧雨",
+    55: "強い霧雨",
+    56: "弱い着氷性霧雨",
+    57: "強い着氷性霧雨",
+    61: "弱い雨",
+    63: "雨",
+    65: "強い雨",
+    66: "弱い着氷性雨",
+    67: "強い着氷性雨",
+    71: "弱い雪",
+    73: "雪",
+    75: "強い雪",
+    77: "雪粒",
+    80: "弱いにわか雨",
+    81: "にわか雨",
+    82: "強いにわか雨",
+    85: "弱いにわか雪",
+    86: "強いにわか雪",
+    95: "雷雨",
+    96: "雷雨と弱い雹",
+    99: "雷雨と強い雹",
+}
 
 
 def now_iso() -> str:
@@ -99,16 +132,137 @@ def normalize_feed_url(url: str) -> str:
     return quote(url, safe=":/?&=%#;,+@!$'()*[]")
 
 
-def fetch_feed_bytes(url: str) -> bytes:
+def fetch_bytes(url: str, timeout: int, accept: str) -> bytes:
     request = Request(
         url,
         headers={
-            "User-Agent": "zaike-feed/0.1 (+https://github.com/taecoshida/okitegami)",
-            "Accept": "application/rss+xml, application/atom+xml, application/xml, text/xml, */*",
+            "User-Agent": "zaike-feed/0.2 (+https://github.com/taecoshida/okitegami)",
+            "Accept": accept,
         },
     )
-    with urlopen(request, timeout=FEED_TIMEOUT_SECONDS) as response:
+    with urlopen(request, timeout=timeout) as response:
         return response.read(2_000_000)
+
+
+def fetch_feed_bytes(url: str) -> bytes:
+    return fetch_bytes(
+        url,
+        FEED_TIMEOUT_SECONDS,
+        "application/rss+xml, application/atom+xml, application/xml, text/xml, */*",
+    )
+
+
+def fetch_json(url: str, timeout: int) -> Any:
+    content = fetch_bytes(url, timeout, "application/json, */*")
+    return json.loads(content.decode("utf-8"))
+
+
+def weather_label(max_temp: float | int | None, precipitation_sum: float | int | None) -> str:
+    if precipitation_sum is not None and float(precipitation_sum) >= 5:
+        return "保留"
+    if max_temp is not None and float(max_temp) >= 32:
+        return "保留"
+    return "読む"
+
+
+def weather_code_label(code: Any) -> str:
+    try:
+        return WEATHER_CODES.get(int(code), f"天気コード{code}")
+    except (TypeError, ValueError):
+        return "天気不明"
+
+
+def format_weather_number(value: Any, unit: str) -> str:
+    if value is None:
+        return "不明"
+    try:
+        number = float(value)
+        if number.is_integer():
+            return f"{int(number)}{unit}"
+        return f"{number:.1f}{unit}"
+    except (TypeError, ValueError):
+        return f"{value}{unit}"
+
+
+def build_weather_url(location: dict[str, Any]) -> str:
+    params = {
+        "latitude": location["latitude"],
+        "longitude": location["longitude"],
+        "daily": ",".join([
+            "weather_code",
+            "temperature_2m_max",
+            "temperature_2m_min",
+            "precipitation_sum",
+            "precipitation_probability_max",
+        ]),
+        "timezone": location.get("timezone", "Asia/Tokyo"),
+        "forecast_days": 3,
+    }
+    return "https://api.open-meteo.com/v1/forecast?" + urlencode(params)
+
+
+def extract_weather_items(config: dict[str, Any]) -> list[dict[str, Any]]:
+    weather = config.get("weather", {})
+    if not weather.get("enabled", False):
+        return []
+
+    items: list[dict[str, Any]] = []
+
+    for location in weather.get("locations", []):
+        if not location.get("enabled", False):
+            continue
+
+        name = str(location.get("name") or "local weather")
+        if "latitude" not in location or "longitude" not in location:
+            items.append(error_item(name, "weather", "latitude / longitude が未設定です。"))
+            continue
+
+        url = build_weather_url(location)
+
+        try:
+            print(f"fetching weather: {name}", flush=True)
+            data = fetch_json(url, WEATHER_TIMEOUT_SECONDS)
+            daily = data.get("daily", {})
+            dates = daily.get("time", [])
+
+            for index, date in enumerate(dates[:3]):
+                code = daily.get("weather_code", [None] * len(dates))[index]
+                max_temp = daily.get("temperature_2m_max", [None] * len(dates))[index]
+                min_temp = daily.get("temperature_2m_min", [None] * len(dates))[index]
+                precipitation = daily.get("precipitation_sum", [None] * len(dates))[index]
+                probability = daily.get("precipitation_probability_max", [None] * len(dates))[index]
+
+                weather_text = weather_code_label(code)
+                title = f"{name}: {date} の天気 — {weather_text}"
+                summary = (
+                    f"最高{format_weather_number(max_temp, '℃')} / "
+                    f"最低{format_weather_number(min_temp, '℃')}。"
+                    f"降水量{format_weather_number(precipitation, 'mm')}、"
+                    f"降水確率最大{format_weather_number(probability, '%')}。"
+                )
+                label = weather_label(max_temp, precipitation)
+
+                items.append({
+                    "id": item_hash("weather", title, url),
+                    "title": title,
+                    "source": "weather",
+                    "url": url,
+                    "published": date,
+                    "class": label,
+                    "memo": "生活シーケンス用の外界条件。外出・洗濯・買い物・作業場所の判断に使う。",
+                    "summary": summary,
+                    "tags": ["weather", weather_text, label],
+                })
+
+            print(f"weather ok: {name}: {min(len(dates), 3)} days", flush=True)
+        except (TimeoutError, HTTPError, URLError) as exc:
+            items.append(error_item(name, url, repr(exc)))
+            print(f"weather error: {name}: {exc!r}", flush=True)
+        except Exception as exc:
+            items.append(error_item(name, url, repr(exc)))
+            print(f"weather error: {name}: {exc!r}", flush=True)
+
+    return items
 
 
 def extract_entry(feed_name: str, entry: Any, read_keywords: list[str], hold_keywords: list[str]) -> dict[str, Any]:
@@ -147,13 +301,13 @@ def error_item(feed_name: str, url: str, message: str) -> dict[str, Any]:
         "url": url,
         "published": now_iso(),
         "class": "保留",
-        "memo": "RSS/Atomの取得に失敗、0件、またはタイムアウトしました。URL確認が必要です。",
+        "memo": "取得に失敗、0件、またはタイムアウトしました。URLや設定の確認が必要です。",
         "summary": clean_text(message, 220),
-        "tags": ["feed-check", "RSS", "hold"],
+        "tags": ["feed-check", "hold"],
     }
 
 
-def fetch_items(config: dict[str, Any]) -> list[dict[str, Any]]:
+def fetch_feed_items(config: dict[str, Any]) -> list[dict[str, Any]]:
     keywords = config.get("keywords", {})
     read_keywords = keywords.get("read", [])
     hold_keywords = keywords.get("hold", [])
@@ -193,6 +347,14 @@ def fetch_items(config: dict[str, Any]) -> list[dict[str, Any]]:
         except Exception as exc:  # Keep one bad feed from breaking the shelf.
             items.append(error_item(name, normalized_url, repr(exc)))
             print(f"feed error: {name}: {exc!r}", flush=True)
+
+    return items
+
+
+def fetch_items(config: dict[str, Any]) -> list[dict[str, Any]]:
+    items = []
+    items.extend(extract_weather_items(config))
+    items.extend(fetch_feed_items(config))
 
     # Deduplicate while preserving order.
     seen = set()
