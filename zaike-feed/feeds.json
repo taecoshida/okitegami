@@ -1,22 +1,53 @@
 {
   "feeds": [
     {
-      "name": "example",
-      "url": "https://github.blog/feed/",
-      "enabled": false,
-      "note": "動作確認用。必要なら enabled を true にする。"
+      "name": "NEDO press candidate",
+      "url": "https://www.nedo.go.jp/rss/press.xml",
+      "enabled": true,
+      "note": "NEDOプレスリリースRSS候補。Actionsで取得可否を確認する。"
+    },
+    {
+      "name": "METI news release candidate",
+      "url": "https://www.meti.go.jp/rss/news_release.xml",
+      "enabled": true,
+      "note": "経済産業省ニュースリリースRSS候補。Actionsで取得可否を確認する。"
+    },
+    {
+      "name": "JOGMEC news candidate",
+      "url": "https://www.jogmec.go.jp/news/rss.xml",
+      "enabled": true,
+      "note": "JOGMECニュースRSS候補。Actionsで取得可否を確認する。"
+    },
+    {
+      "name": "arXiv hydrogen energy",
+      "url": "https://export.arxiv.org/api/query?search_query=all:hydrogen%20AND%20all:energy&start=0&max_results=20&sortBy=submittedDate&sortOrder=descending",
+      "enabled": true,
+      "note": "天然水素そのものではなく、水素・エネルギー周辺の研究更新を薄く拾うAtom feed。"
+    },
+    {
+      "name": "arXiv carbon capture storage",
+      "url": "https://export.arxiv.org/api/query?search_query=all:carbon%20AND%20all:capture%20AND%20all:storage&start=0&max_results=20&sortBy=submittedDate&sortOrder=descending",
+      "enabled": true,
+      "note": "CCS/CCUS周辺の研究更新を薄く拾うAtom feed。"
     }
   ],
   "keywords": {
     "read": [
       "水素",
       "天然水素",
+      "hydrogen",
       "資源",
+      "resource",
       "エネルギー",
+      "energy",
       "地熱",
+      "geothermal",
       "CCS",
       "CCUS",
+      "carbon capture",
+      "storage",
       "実証",
+      "demonstration",
       "先導研究",
       "NEDO",
       "公募",
@@ -24,14 +55,22 @@
     ],
     "hold": [
       "脱炭素",
+      "decarbonization",
       "蓄電池",
+      "battery",
       "アンモニア",
+      "ammonia",
       "再生可能エネルギー",
+      "renewable",
       "インフラ",
+      "infrastructure",
       "研究開発",
+      "research and development",
       "GX",
       "政策",
-      "資料"
+      "policy",
+      "資料",
+      "report"
     ]
   }
 }
