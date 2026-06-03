@@ -3,34 +3,47 @@
     {
       "name": "NEDO press candidate",
       "url": "https://www.nedo.go.jp/rss/press.xml",
-      "enabled": true,
-      "note": "NEDOプレスリリースRSS候補。Actionsで取得可否を確認する。"
+      "enabled": false,
+      "note": "取得失敗が続くため一旦停止。必要になったらURLを再確認して戻す。"
     },
     {
       "name": "METI news release candidate",
       "url": "https://www.meti.go.jp/rss/news_release.xml",
-      "enabled": true,
-      "note": "経済産業省ニュースリリースRSS候補。Actionsで取得可否を確認する。"
+      "enabled": false,
+      "note": "タイムアウトが出たため一旦停止。必要になったらURLを再確認して戻す。"
     },
     {
       "name": "JOGMEC news candidate",
       "url": "https://www.jogmec.go.jp/news/rss.xml",
-      "enabled": true,
-      "note": "JOGMECニュースRSS候補。Actionsで取得可否を確認する。"
+      "enabled": false,
+      "note": "取得失敗が続くため一旦停止。必要になったらURLを再確認して戻す。"
     },
     {
       "name": "arXiv hydrogen energy",
-      "url": "https://export.arxiv.org/api/query?search_query=all:hydrogen%20AND%20all:energy&start=0&max_results=20&sortBy=submittedDate&sortOrder=descending",
-      "enabled": true,
-      "note": "天然水素そのものではなく、水素・エネルギー周辺の研究更新を薄く拾うAtom feed。"
+      "url": "https://export.arxiv.org/api/query?search_query=all:hydrogen%20AND%20all:energy&start=0&max_results=5&sortBy=submittedDate&sortOrder=descending",
+      "enabled": false,
+      "note": "429対策として一旦停止。RSS棚に戻すなら件数を少なくして単独で確認する。"
     },
     {
       "name": "arXiv carbon capture storage",
-      "url": "https://export.arxiv.org/api/query?search_query=all:carbon%20AND%20all:capture%20AND%20all:storage&start=0&max_results=20&sortBy=submittedDate&sortOrder=descending",
-      "enabled": true,
-      "note": "CCS/CCUS周辺の研究更新を薄く拾うAtom feed。"
+      "url": "https://export.arxiv.org/api/query?search_query=all:carbon%20AND%20all:capture%20AND%20all:storage&start=0&max_results=5&sortBy=submittedDate&sortOrder=descending",
+      "enabled": false,
+      "note": "タイムアウト対策として一旦停止。RSS棚に戻すなら件数を少なくして単独で確認する。"
     }
   ],
+  "weather": {
+    "enabled": true,
+    "locations": [
+      {
+        "name": "local weather",
+        "latitude": 35.1815,
+        "longitude": 136.9066,
+        "timezone": "Asia/Tokyo",
+        "enabled": true,
+        "note": "初期値は名古屋付近。生活圏に合わせて緯度経度を書き換える。"
+      }
+    ]
+  },
   "keywords": {
     "read": [
       "水素",
