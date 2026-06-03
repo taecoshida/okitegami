@@ -44,6 +44,10 @@ function normalizeClass(value) {
   return "保留";
 }
 
+function isRawApiUrl(value) {
+  return String(value ?? "").includes("api.open-meteo.com");
+}
+
 function renderSummary() {
   const counts = {
     all: items.length,
@@ -75,10 +79,18 @@ function renderTags(tags) {
   `;
 }
 
+function renderTitle(title, url) {
+  if (!url || url === "#" || isRawApiUrl(url)) {
+    return title;
+  }
+
+  return `<a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">${title}</a>`;
+}
+
 function renderItem(item) {
   const label = normalizeClass(item.class);
   const title = escapeHtml(item.title || "untitled");
-  const url = escapeHtml(item.url || item.link || "#");
+  const url = item.url || item.link || "#";
   const source = escapeHtml(item.source || "unknown");
   const published = escapeHtml(formatDate(item.published || item.date));
   const memo = item.memo ? `<p class="feed-memo">${escapeHtml(item.memo)}</p>` : "";
@@ -89,7 +101,7 @@ function renderItem(item) {
     <article class="feed-card" data-class="${escapeHtml(label)}">
       <header>
         <p class="feed-meta">${escapeHtml(label)} / ${source} / ${published}</p>
-        <h3><a href="${url}" target="_blank" rel="noopener noreferrer">${title}</a></h3>
+        <h3>${renderTitle(title, url)}</h3>
       </header>
       ${memo}
       ${summary}
