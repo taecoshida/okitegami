@@ -3,12 +3,12 @@
 
 This script is intentionally small and defensive:
 - read zaike-feed/feeds.json
-- fetch enabled RSS/Atom feeds
+- fetch enabled RSS/Atom feeds with short timeouts
 - classify entries by keywords
 - write zaike-feed/data/feed.json
 
-Bad or dead feeds should not break the whole workflow. They are reported as
-"保留" items so the feed list can be tuned later.
+Bad, dead, or slow feeds should not break or stall the whole workflow. They are
+reported as "保留" items so the feed list can be tuned later.
 """
 
 from __future__ import annotations
@@ -19,7 +19,9 @@ import re
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Any
+from urllib.error import HTTPError, URLError
 from urllib.parse import quote
+from urllib.request import Request, urlopen
 
 import feedparser
 
@@ -28,6 +30,8 @@ CONFIG_PATH = ROOT / "zaike-feed" / "feeds.json"
 OUTPUT_PATH = ROOT / "zaike-feed" / "data" / "feed.json"
 
 JST = timezone(timedelta(hours=9))
+FEED_TIMEOUT_SECONDS = 10
+MAX_ITEMS_PER_FEED = 12
 
 
 def now_iso() -> str:
@@ -95,6 +99,18 @@ def normalize_feed_url(url: str) -> str:
     return quote(url, safe=":/?&=%#;,+@!$'()*[]")
 
 
+def fetch_feed_bytes(url: str) -> bytes:
+    request = Request(
+        url,
+        headers={
+            "User-Agent": "zaike-feed/0.1 (+https://github.com/taecoshida/okitegami)",
+            "Accept": "application/rss+xml, application/atom+xml, application/xml, text/xml, */*",
+        },
+    )
+    with urlopen(request, timeout=FEED_TIMEOUT_SECONDS) as response:
+        return response.read(2_000_000)
+
+
 def extract_entry(feed_name: str, entry: Any, read_keywords: list[str], hold_keywords: list[str]) -> dict[str, Any]:
     title = clean_text(getattr(entry, "title", "untitled"), 180) or "untitled"
     url = clean_text(getattr(entry, "link", ""), 500) or "#"
@@ -131,7 +147,7 @@ def error_item(feed_name: str, url: str, message: str) -> dict[str, Any]:
         "url": url,
         "published": now_iso(),
         "class": "保留",
-        "memo": "RSS/Atomの取得に失敗、または項目が0件でした。URL確認が必要です。",
+        "memo": "RSS/Atomの取得に失敗、0件、またはタイムアウトしました。URL確認が必要です。",
         "summary": clean_text(message, 220),
         "tags": ["feed-check", "RSS", "hold"],
     }
@@ -148,7 +164,7 @@ def fetch_items(config: dict[str, Any]) -> list[dict[str, Any]]:
         if not feed.get("enabled", False):
             continue
 
-        name = feed.get("name") or feed.get("url") or "unknown"
+        name = str(feed.get("name") or feed.get("url") or "unknown")
         url = feed.get("url")
         if not url:
             continue
@@ -156,22 +172,27 @@ def fetch_items(config: dict[str, Any]) -> list[dict[str, Any]]:
         normalized_url = normalize_feed_url(str(url))
 
         try:
-            parsed = feedparser.parse(normalized_url)
+            print(f"fetching feed: {name}", flush=True)
+            content = fetch_feed_bytes(normalized_url)
+            parsed = feedparser.parse(content)
             entries = list(getattr(parsed, "entries", []))
 
             if not entries:
                 bozo_message = clean_text(getattr(parsed, "bozo_exception", "no entries"), 220)
-                items.append(error_item(str(name), normalized_url, bozo_message or "no entries"))
-                print(f"feed warning: {name}: no entries")
+                items.append(error_item(name, normalized_url, bozo_message or "no entries"))
+                print(f"feed warning: {name}: no entries", flush=True)
                 continue
 
-            for entry in entries[:20]:
-                items.append(extract_entry(str(name), entry, read_keywords, hold_keywords))
+            for entry in entries[:MAX_ITEMS_PER_FEED]:
+                items.append(extract_entry(name, entry, read_keywords, hold_keywords))
 
-            print(f"feed ok: {name}: {min(len(entries), 20)} items")
+            print(f"feed ok: {name}: {min(len(entries), MAX_ITEMS_PER_FEED)} items", flush=True)
+        except (TimeoutError, HTTPError, URLError) as exc:
+            items.append(error_item(name, normalized_url, repr(exc)))
+            print(f"feed error: {name}: {exc!r}", flush=True)
         except Exception as exc:  # Keep one bad feed from breaking the shelf.
-            items.append(error_item(str(name), normalized_url, repr(exc)))
-            print(f"feed error: {name}: {exc!r}")
+            items.append(error_item(name, normalized_url, repr(exc)))
+            print(f"feed error: {name}: {exc!r}", flush=True)
 
     # Deduplicate while preserving order.
     seen = set()
@@ -200,7 +221,7 @@ def main() -> None:
         "items": items,
     }
     save_json(OUTPUT_PATH, output)
-    print(f"updated {OUTPUT_PATH.relative_to(ROOT)} with {len(items)} items")
+    print(f"updated {OUTPUT_PATH.relative_to(ROOT)} with {len(items)} items", flush=True)
 
 
 if __name__ == "__main__":
