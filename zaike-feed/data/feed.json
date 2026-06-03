@@ -1,25 +1,80 @@
 {
-  "generated_at": "2026-06-03T00:00:00+09:00",
+  "generated_at": "2026-06-03T18:49:01+09:00",
   "items": [
     {
-      "title": "zaike feed を設置した",
-      "source": "okitegami",
-      "url": "../index.html",
-      "published": "2026-06-03",
-      "class": "読む",
-      "memo": "RSSを読む前の、最初の棚札。資源・エネルギー・研究開発資料を薄く受信する場所。",
-      "summary": "まずは静的なfeed.jsonを表示する。次にRSS取得とGitHub Actions更新を足す。",
-      "tags": ["zaike feed", "resources", "antenna"]
+      "id": "6e6355199795d0ea",
+      "title": "NEDO press candidate の取得を確認する",
+      "source": "zaike feed",
+      "url": "https://www.nedo.go.jp/rss/press.xml",
+      "published": "2026-06-03T18:48:40+09:00",
+      "class": "保留",
+      "memo": "RSS/Atomの取得に失敗、0件、またはタイムアウトしました。URL確認が必要です。",
+      "summary": "",
+      "tags": [
+        "feed-check",
+        "RSS",
+        "hold"
+      ]
     },
     {
-      "title": "RSS未設定の情報源は、いったん手動棚に置く",
+      "id": "987efec9b331e5ac",
+      "title": "METI news release candidate の取得を確認する",
       "source": "zaike feed",
-      "url": "./README.md",
-      "published": "2026-06-03",
+      "url": "https://www.meti.go.jp/rss/news_release.xml",
+      "published": "2026-06-03T18:48:50+09:00",
       "class": "保留",
-      "memo": "NEDO・資源エネルギー庁・JOGMECなどは、RSS URLの確認後に feeds.json へ追加する。",
-      "summary": "最初は壊れない静的棚として使い、確認できたRSSから順に自動化する。",
-      "tags": ["RSS", "manual", "hold"]
+      "memo": "RSS/Atomの取得に失敗、0件、またはタイムアウトしました。URL確認が必要です。",
+      "summary": "TimeoutError('The read operation timed out')",
+      "tags": [
+        "feed-check",
+        "RSS",
+        "hold"
+      ]
+    },
+    {
+      "id": "59eb6f4a2778baf1",
+      "title": "JOGMEC news candidate の取得を確認する",
+      "source": "zaike feed",
+      "url": "https://www.jogmec.go.jp/news/rss.xml",
+      "published": "2026-06-03T18:48:51+09:00",
+      "class": "保留",
+      "memo": "RSS/Atomの取得に失敗、0件、またはタイムアウトしました。URL確認が必要です。",
+      "summary": "",
+      "tags": [
+        "feed-check",
+        "RSS",
+        "hold"
+      ]
+    },
+    {
+      "id": "d3f0ac9ef6e618e4",
+      "title": "arXiv hydrogen energy の取得を確認する",
+      "source": "zaike feed",
+      "url": "https://export.arxiv.org/api/query?search_query=all:hydrogen%20AND%20all:energy&start=0&max_results=20&sortBy=submittedDate&sortOrder=descending",
+      "published": "2026-06-03T18:49:01+09:00",
+      "class": "保留",
+      "memo": "RSS/Atomの取得に失敗、0件、またはタイムアウトしました。URL確認が必要です。",
+      "summary": "TimeoutError('The read operation timed out')",
+      "tags": [
+        "feed-check",
+        "RSS",
+        "hold"
+      ]
+    },
+    {
+      "id": "ffce98be29717938",
+      "title": "arXiv carbon capture storage の取得を確認する",
+      "source": "zaike feed",
+      "url": "https://export.arxiv.org/api/query?search_query=all:carbon%20AND%20all:capture%20AND%20all:storage&start=0&max_results=20&sortBy=submittedDate&sortOrder=descending",
+      "published": "2026-06-03T18:49:01+09:00",
+      "class": "保留",
+      "memo": "RSS/Atomの取得に失敗、0件、またはタイムアウトしました。URL確認が必要です。",
+      "summary": "",
+      "tags": [
+        "feed-check",
+        "RSS",
+        "hold"
+      ]
     }
   ]
 }
