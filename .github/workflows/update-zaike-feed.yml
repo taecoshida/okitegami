@@ -9,6 +9,7 @@ permissions:
 jobs:
   update:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
 
     steps:
       - name: Checkout repository
@@ -23,6 +24,7 @@ jobs:
         run: pip install feedparser
 
       - name: Update zaike feed
+        timeout-minutes: 3
         run: python scripts/update_zaike_feed.py
 
       - name: Commit changes
