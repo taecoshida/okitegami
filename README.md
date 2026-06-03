@@ -13,10 +13,24 @@ okitegami/
 ├── style.css
 ├── entries.js
 ├── main.js
-└── images/
+├── images/
+├── weblog/
+├── recipe/
+├── sequence/
+├── zaike-feed/
+│   ├── index.html
+│   ├── style.css
+│   ├── main.js
+│   ├── feeds.json
+│   └── data/
+│       └── feed.json
+├── scripts/
+│   └── update_zaike_feed.py
+└── .github/workflows/
+    └── update-zaike-feed.yml
 ```
 
-## 更新方法
+## 置き手紙の更新方法
 
 画像ありの場合：
 
@@ -34,3 +48,15 @@ okitegami/
 ```
 
 画像なしの場合は `image: ""` にします。
+
+## zaike feed
+
+`zaike-feed/` は、資源・エネルギー・研究開発・制度資料の更新を薄く受信するための棚です。
+
+- 表示：`zaike-feed/index.html`
+- データ：`zaike-feed/data/feed.json`
+- RSS設定：`zaike-feed/feeds.json`
+- 更新スクリプト：`scripts/update_zaike_feed.py`
+- 手動更新：GitHub Actions の `Update zaike feed`
+
+RSSを追加するときは、`zaike-feed/feeds.json` にURLを入れて `enabled: true` にします。
