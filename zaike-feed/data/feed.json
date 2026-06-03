@@ -1,79 +1,49 @@
 {
-  "generated_at": "2026-06-03T19:06:30+09:00",
+  "generated_at": "2026-06-03T19:12:04+09:00",
   "items": [
     {
-      "id": "6e6355199795d0ea",
-      "title": "NEDO press candidate の取得を確認する",
-      "source": "zaike feed",
-      "url": "https://www.nedo.go.jp/rss/press.xml",
-      "published": "2026-06-03T19:06:08+09:00",
+      "id": "ee5669a8331faeaf",
+      "title": "local weather: 2026-06-03 の天気 — 強い雨",
+      "source": "weather",
+      "url": "https://api.open-meteo.com/v1/forecast?latitude=35.1815&longitude=136.9066&daily=weather_code%2Ctemperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cprecipitation_probability_max&timezone=Asia%2FTokyo&forecast_days=3",
+      "published": "2026-06-03",
       "class": "保留",
-      "memo": "RSS/Atomの取得に失敗、0件、またはタイムアウトしました。URL確認が必要です。",
-      "summary": "",
+      "memo": "生活シーケンス用の外界条件。外出・洗濯・買い物・作業場所の判断に使う。",
+      "summary": "最高27℃ / 最低18.6℃。降水量92.8mm、降水確率最大100%。",
       "tags": [
-        "feed-check",
-        "RSS",
-        "hold"
+        "weather",
+        "強い雨",
+        "保留"
       ]
     },
     {
-      "id": "987efec9b331e5ac",
-      "title": "METI news release candidate の取得を確認する",
-      "source": "zaike feed",
-      "url": "https://www.meti.go.jp/rss/news_release.xml",
-      "published": "2026-06-03T19:06:19+09:00",
-      "class": "保留",
-      "memo": "RSS/Atomの取得に失敗、0件、またはタイムアウトしました。URL確認が必要です。",
-      "summary": "TimeoutError('The read operation timed out')",
+      "id": "5b206c3dfbca0905",
+      "title": "local weather: 2026-06-04 の天気 — 曇り",
+      "source": "weather",
+      "url": "https://api.open-meteo.com/v1/forecast?latitude=35.1815&longitude=136.9066&daily=weather_code%2Ctemperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cprecipitation_probability_max&timezone=Asia%2FTokyo&forecast_days=3",
+      "published": "2026-06-04",
+      "class": "読む",
+      "memo": "生活シーケンス用の外界条件。外出・洗濯・買い物・作業場所の判断に使う。",
+      "summary": "最高24℃ / 最低19.4℃。降水量0mm、降水確率最大31%。",
       "tags": [
-        "feed-check",
-        "RSS",
-        "hold"
+        "weather",
+        "曇り",
+        "読む"
       ]
     },
     {
-      "id": "59eb6f4a2778baf1",
-      "title": "JOGMEC news candidate の取得を確認する",
-      "source": "zaike feed",
-      "url": "https://www.jogmec.go.jp/news/rss.xml",
-      "published": "2026-06-03T19:06:19+09:00",
-      "class": "保留",
-      "memo": "RSS/Atomの取得に失敗、0件、またはタイムアウトしました。URL確認が必要です。",
-      "summary": "",
+      "id": "d6b38d6fe0dbc479",
+      "title": "local weather: 2026-06-05 の天気 — 曇り",
+      "source": "weather",
+      "url": "https://api.open-meteo.com/v1/forecast?latitude=35.1815&longitude=136.9066&daily=weather_code%2Ctemperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cprecipitation_probability_max&timezone=Asia%2FTokyo&forecast_days=3",
+      "published": "2026-06-05",
+      "class": "読む",
+      "memo": "生活シーケンス用の外界条件。外出・洗濯・買い物・作業場所の判断に使う。",
+      "summary": "最高25.2℃ / 最低18.5℃。降水量0mm、降水確率最大24%。",
       "tags": [
-        "feed-check",
-        "RSS",
-        "hold"
-      ]
-    },
-    {
-      "id": "d3f0ac9ef6e618e4",
-      "title": "arXiv hydrogen energy の取得を確認する",
-      "source": "zaike feed",
-      "url": "https://export.arxiv.org/api/query?search_query=all:hydrogen%20AND%20all:energy&start=0&max_results=20&sortBy=submittedDate&sortOrder=descending",
-      "published": "2026-06-03T19:06:19+09:00",
-      "class": "保留",
-      "memo": "RSS/Atomの取得に失敗、0件、またはタイムアウトしました。URL確認が必要です。",
-      "summary": "",
-      "tags": [
-        "feed-check",
-        "RSS",
-        "hold"
-      ]
-    },
-    {
-      "id": "ffce98be29717938",
-      "title": "arXiv carbon capture storage の取得を確認する",
-      "source": "zaike feed",
-      "url": "https://export.arxiv.org/api/query?search_query=all:carbon%20AND%20all:capture%20AND%20all:storage&start=0&max_results=20&sortBy=submittedDate&sortOrder=descending",
-      "published": "2026-06-03T19:06:30+09:00",
-      "class": "保留",
-      "memo": "RSS/Atomの取得に失敗、0件、またはタイムアウトしました。URL確認が必要です。",
-      "summary": "TimeoutError('The read operation timed out')",
-      "tags": [
-        "feed-check",
-        "RSS",
-        "hold"
+        "weather",
+        "曇り",
+        "読む"
       ]
     }
   ]
