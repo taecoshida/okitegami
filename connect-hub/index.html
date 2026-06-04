@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>connect hub / okitegami</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header minimal-header connect-header">
+    <p class="label">external connection panel</p>
+    <h1>connect hub</h1>
+    <p class="lead">
+      外部の声・場・文脈を、必要なときだけONにする接続盤。
+    </p>
+    <p class="back-link"><a href="../index.html">← okitegamiへ戻る</a></p>
+  </header>
+
+  <main>
+    <section class="connect-overview" aria-labelledby="connect-overview-title">
+      <div class="section-heading">
+        <h2 id="connect-overview-title">接続アプリ</h2>
+        <p>
+          ON/OFFはこの端末のブラウザにだけ保存されます。
+          本体OSに入れすぎず、必要な回線だけ一時的に開きます。
+        </p>
+      </div>
+
+      <div id="connection-apps" class="connection-grid" aria-live="polite">
+        <p class="loading">接続アプリを読み込み中...</p>
+      </div>
+    </section>
+
+    <section class="carry-line" aria-labelledby="carry-line-title">
+      <div class="section-heading compact-heading">
+        <h2 id="carry-line-title">今日コピーした1行</h2>
+        <p>
+          外部文脈を全部持ち込まず、1行だけ本体へ戻します。
+        </p>
+      </div>
+
+      <label class="carry-line-box">
+        <span>one-line copy</span>
+        <textarea id="carry-line-input" rows="3" placeholder="例：他人の反応と同席したかった。"></textarea>
+      </label>
+      <div class="carry-actions">
+        <button id="save-carry-line" type="button">保存</button>
+        <button id="clear-carry-line" type="button">消す</button>
+        <p id="carry-line-status" class="carry-status" aria-live="polite"></p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>connect hub / local switchboard</p>
+  </footer>
+
+  <script src="apps.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>
