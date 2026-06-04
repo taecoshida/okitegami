@@ -17,6 +17,11 @@ okitegami/
 ├── weblog/
 ├── recipe/
 ├── sequence/
+├── connect-hub/
+│   ├── index.html
+│   ├── style.css
+│   ├── apps.js
+│   └── main.js
 ├── zaike-feed/
 │   ├── index.html
 │   ├── style.css
@@ -48,6 +53,17 @@ okitegami/
 ```
 
 画像なしの場合は `image: ""` にします。
+
+## connect hub
+
+`connect-hub/` は、外部の声・場・文脈を必要なときだけONにするための接続盤です。
+
+- 表示：`connect-hub/index.html`
+- データ：`connect-hub/apps.js`
+- 動作：`connect-hub/main.js`
+- 見た目：`connect-hub/style.css`
+
+ON/OFFの状態と「今日コピーした1行」は、GitHub上のファイルではなく、その端末のブラウザ内に保存されます。
 
 ## zaike feed
 
