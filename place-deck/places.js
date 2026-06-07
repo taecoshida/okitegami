@@ -60,3 +60,5 @@ const places = [
     query: "川沿い 公園"
   }
 ];
+
+window.places = places;
