@@ -1,36 +1,101 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>okitegami</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="responsive-top.css">
+  <link rel="stylesheet" href="top-weather.css">
 </head>
 <body>
-  <header class="site-header">
-    <p class="label">daily shelf</p>
+  <aside id="top-weather" class="top-weather" aria-label="今日の天気">
+    <div class="top-weather-card" role="status" aria-label="天気を読み込み中">
+      <span class="top-weather-icon" aria-hidden="true">○</span>
+      <span class="top-weather-main">
+        <span class="top-weather-title">天気を取得中</span>
+        <span class="top-weather-detail">local weather</span>
+      </span>
+    </div>
+  </aside>
+
+  <header class="site-header minimal-header">
+    <p class="label mobile-context">small web shelf</p>
     <h1>okitegami</h1>
-    <p class="lead">生活の中に置いておく、短い手紙と小さな接続口。</p>
+    <p class="lead mobile-context">
+      画像と短い言葉を、流さずに置いておく場所。
+    </p>
   </header>
 
   <main>
-    <section class="okitegami-shelf">
-      <div class="section-heading">
-        <h2>入口</h2>
-        <p>読む、戻る、外へ出る。必要な棚だけ開く。</p>
+    <section class="okitegami-shelf" aria-labelledby="okitegami-title">
+      <div class="section-heading mobile-context">
+        <h2>置き手紙</h2>
+        <p>
+          今日の1枚、短い記録、あとで戻りたい言葉。
+          ボタンでめくれる小さな棚です。
+        </p>
       </div>
+      <h2 id="okitegami-title" class="visually-hidden">置き手紙</h2>
 
-      <div class="portal-grid">
-        <a class="shelf-link" href="./connect-hub/">
-          <span class="shelf-label">connect hub</span>
-          <span class="shelf-text">接続先をオンオフする小さな操作盤</span>
-        </a>
-        <a class="shelf-link" href="./place-deck/">
-          <span class="shelf-label">place deck</span>
-          <span class="shelf-text">行きたい店と場所を、ルート付きカードにする</span>
-        </a>
-      </div>
+      <section id="entries" class="entries single-entry" aria-label="entries">
+        <p class="loading">置き手紙を読み込み中...</p>
+      </section>
+
+      <section class="toolbar quiet-toolbar" aria-label="display options">
+        <p id="entry-count" class="entry-count">entries</p>
+        <div class="pager" aria-label="entry navigation">
+          <button id="prev-entry" type="button">前へ</button>
+          <button id="next-entry" type="button">次へ</button>
+        </div>
+      </section>
     </section>
+
+    <section class="portal-grid quiet-links" aria-label="zaike shelves">
+      <a class="shelf-link" href="weblog/index.html">
+        <span class="shelf-label">zaike weblog</span>
+        <span class="shelf-text">生活の中で発生した観察を、少し長い文章として置いておく場所。</span>
+      </a>
+
+      <a class="shelf-link" href="recipe/index.html">
+        <span class="shelf-label">zaike recipe</span>
+        <span class="shelf-text">生活の中で再現できた手順を、あとで戻れる形で置いておく場所。</span>
+      </a>
+
+      <a class="shelf-link" href="sequence/index.html">
+        <span class="shelf-label">zaike sequence</span>
+        <span class="shelf-text">生活の中で状態が切り替わる数秒を、動く写真として置いておく場所。</span>
+      </a>
+
+      <a class="shelf-link" href="place-deck/index.html">
+        <span class="shelf-label">place deck</span>
+        <span class="shelf-text">行きたい店や場所を、ルート付きカードとして置いておく場所。</span>
+      </a>
+
+      <!--
+      <a class="shelf-link" href="zaike-feed/index.html">
+        <span class="shelf-label">zaike feed</span>
+        <span class="shelf-text">天気を、外出・洗濯・作業場所の判断に使える形で置いておく場所。</span>
+      </a>
+      -->
+    </section>
+
+    <!--
+    <section class="intro">
+      <h2>about</h2>
+      <p>
+        ここは、画像・短い言葉・生活の記録を、日付ごとの小さなカードとして置いていく場所です。
+      </p>
+    </section>
+    -->
   </main>
+
+  <footer>
+    <p>okitegami / static web shelf</p>
+  </footer>
+
+  <script src="entries.js"></script>
+  <script src="main.js"></script>
+  <script src="top-weather.js"></script>
 </body>
 </html>
