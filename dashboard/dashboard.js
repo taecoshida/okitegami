@@ -4,14 +4,9 @@ const configView = document.getElementById("config-view");
 const checkList = document.getElementById("check-list");
 const links = document.getElementById("dashboard-links");
 const appsContainer = document.getElementById("connection-apps");
-const carryLineInput = document.getElementById("carry-line-input");
-const saveCarryLineButton = document.getElementById("save-carry-line");
-const clearCarryLineButton = document.getElementById("clear-carry-line");
-const carryLineStatus = document.getElementById("carry-line-status");
 const placeGrid = document.getElementById("place-grid");
 
 const APP_STATUS_STORAGE_KEY = "okitegami-dashboard-connect-status";
-const CARRY_LINE_STORAGE_KEY = "okitegami-dashboard-carry-line";
 
 function escapeHtml(value) {
   return String(value ?? "")
@@ -65,14 +60,15 @@ function renderConfig() {
 
   const apps = window.OKITEGAMI_CONNECTION_APPS || [];
   const places = window.OKITEGAMI_PLACES || [];
+  const deckCount = apps.length + places.length;
 
   setStatus([
     ["site", config.siteTitle || "unknown"],
     ["mode", config.mode || "unknown"],
     ["weather", config.weather && config.weather.enabled ? "ON" : "OFF"],
     ["entries", config.entriesSource || "not set"],
-    ["connect hub", `${apps.length} apps`],
-    ["place deck", `${places.length} places`]
+    ["deck", `${deckCount} cards`],
+    ["places", `${places.length} cards`]
   ]);
 
   const checks = [
@@ -80,7 +76,7 @@ function renderConfig() {
     config.weather && config.weather.enabled ? "weather is ON" : "weather is OFF",
     config.entriesSource ? `entries source: ${config.entriesSource}` : "entries source not set",
     localStorageAvailable() ? "localStorage available" : "localStorage unavailable",
-    `connection apps: ${apps.length}`,
+    `connection cards: ${apps.length}`,
     `place cards: ${places.length}`
   ];
 
@@ -152,7 +148,7 @@ function renderConnectionApps() {
   const apps = window.OKITEGAMI_CONNECTION_APPS || [];
 
   if (!apps.length) {
-    appsContainer.innerHTML = '<p class="empty">接続アプリはまだありません。</p>';
+    appsContainer.innerHTML = '<p class="empty">接続カードはまだありません。</p>';
     return;
   }
 
@@ -162,31 +158,10 @@ function renderConnectionApps() {
     .join("");
 }
 
-function loadCarryLine() {
-  if (!carryLineInput) return;
-  carryLineInput.value = localStorage.getItem(CARRY_LINE_STORAGE_KEY) || "";
-}
-
-function setCarryStatus(message) {
-  if (!carryLineStatus) return;
-  carryLineStatus.textContent = message;
-}
-
 appsContainer?.addEventListener("click", (event) => {
   const button = event.target.closest(".status-switch");
   if (!button) return;
   setAppStatus(button.dataset.appId, button.dataset.nextStatus);
-});
-
-saveCarryLineButton?.addEventListener("click", () => {
-  localStorage.setItem(CARRY_LINE_STORAGE_KEY, carryLineInput.value.trim());
-  setCarryStatus("保存しました。ブラウザ内にだけ残ります。");
-});
-
-clearCarryLineButton?.addEventListener("click", () => {
-  localStorage.removeItem(CARRY_LINE_STORAGE_KEY);
-  carryLineInput.value = "";
-  setCarryStatus("消しました。");
 });
 
 const routeModes = [
@@ -248,5 +223,4 @@ function renderPlaceDeck() {
 
 renderConfig();
 renderConnectionApps();
-loadCarryLine();
 renderPlaceDeck();
