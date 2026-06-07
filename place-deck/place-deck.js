@@ -34,7 +34,7 @@ function placeCard(place) {
     .join("");
 
   const buttons = routeModes
-    .map(([mode, label]) => `<a href="${mapUrl(place, mode)}" target="_blank" rel="noopener">${label}</a>`)
+    .map(([mode, label]) => `<a href="${mapUrl(place, mode)}" target="_blank" rel="noopener">${escapeHtml(label)}</a>`)
     .join("");
 
   return `
