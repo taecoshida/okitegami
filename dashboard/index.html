@@ -12,12 +12,11 @@
     <div class="dashboard-title-block">
       <p class="label">control room</p>
       <h1>okitegami dashboard</h1>
-      <p class="lead">表ページの状態、外部接続、場所カードを確認するための制御室。表の index からはリンクしない。</p>
+      <p class="lead">表ページの状態と、必要な接続先・行き先カードだけを確認する制御室。表の index からはリンクしない。</p>
     </div>
 
     <nav class="dashboard-nav" aria-label="dashboard sections">
-      <a href="#connect-title">connect</a>
-      <a href="#place-title">places</a>
+      <a href="#deck-title">deck</a>
       <a href="#status-title">status</a>
       <a href="#config-title">config</a>
     </nav>
@@ -58,45 +57,32 @@
       </nav>
     </section>
 
-    <section class="dashboard-panel feature-panel connect-panel" aria-labelledby="connect-title">
+    <section class="dashboard-panel feature-panel deck-panel" aria-labelledby="deck-title">
       <div class="panel-heading panel-heading-row">
         <div>
-          <p class="panel-kicker">external inputs</p>
-          <h2 id="connect-title">connect hub</h2>
+          <p class="panel-kicker">control deck</p>
+          <h2 id="deck-title">deck</h2>
         </div>
-        <p class="panel-note">外部の声・場・文脈を、必要なときだけONにする接続盤。</p>
+        <p class="panel-note">必要な接続先と行き先を、1つのカード棚にまとめる。外へ出る前の軽い操作盤。</p>
       </div>
 
-      <div id="connection-apps" class="connection-grid" aria-live="polite">
-        <p class="loading">接続アプリを読み込み中...</p>
-      </div>
-
-      <section class="carry-line" aria-labelledby="carry-line-title">
-        <div>
-          <h3 id="carry-line-title">今日コピーした1行</h3>
-          <p>外部文脈を全部持ち込まず、1行だけ本体へ戻します。</p>
+      <section class="deck-group" aria-labelledby="connection-title">
+        <div class="deck-group-heading">
+          <h3 id="connection-title">connection cards</h3>
+          <p>状態確認と制作導線。</p>
         </div>
-        <label class="carry-line-box">
-          <span>one-line copy</span>
-          <textarea id="carry-line-input" rows="3" placeholder="例：他人の反応と同席したかった。"></textarea>
-        </label>
-        <div class="carry-actions">
-          <button id="save-carry-line" type="button">保存</button>
-          <button id="clear-carry-line" type="button">消す</button>
-          <p id="carry-line-status" class="carry-status" aria-live="polite"></p>
+        <div id="connection-apps" class="connection-grid" aria-live="polite">
+          <p class="loading">接続カードを読み込み中...</p>
         </div>
       </section>
-    </section>
 
-    <section class="dashboard-panel feature-panel place-panel" aria-labelledby="place-title">
-      <div class="panel-heading panel-heading-row">
-        <div>
-          <p class="panel-kicker">route cards</p>
-          <h2 id="place-title">place deck</h2>
+      <section class="deck-group" aria-labelledby="places-title">
+        <div class="deck-group-heading">
+          <h3 id="places-title">place cards</h3>
+          <p>飯・着席・魚と米の候補。</p>
         </div>
-        <p class="panel-note">行きたい店や場所をカード化して、必要なときだけ Google Maps のルートを開く。</p>
-      </div>
-      <section class="place-grid" id="place-grid" aria-live="polite"></section>
+        <div class="place-grid" id="place-grid" aria-live="polite"></div>
+      </section>
     </section>
 
     <section class="dashboard-panel config-panel" aria-labelledby="config-title">
