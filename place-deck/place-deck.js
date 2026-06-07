@@ -11,17 +11,26 @@ function mapUrl(place, mode) {
   return `https://www.google.com/maps/dir/?api=1&destination=${destination}&travelmode=${mode}`;
 }
 
+function escapeHtml(value) {
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
 function visual(place) {
   if (place.image) {
-    return `<img src="${place.image}" alt="${place.name}">`;
+    return `<img src="${escapeHtml(place.image)}" alt="${escapeHtml(place.name)}">`;
   }
 
-  return `<span>${place.name}<br>image slot</span>`;
+  return `<span>${escapeHtml(place.name)}<br>image slot</span>`;
 }
 
 function placeCard(place) {
   const tags = (place.tags || [])
-    .map((tag) => `<li>${tag}</li>`)
+    .map((tag) => `<li>${escapeHtml(tag)}</li>`)
     .join("");
 
   const buttons = routeModes
@@ -29,22 +38,22 @@ function placeCard(place) {
     .join("");
 
   return `
-    <article class="place-card" id="${place.id}">
+    <article class="place-card" id="${escapeHtml(place.id)}">
       <div class="place-visual">${visual(place)}</div>
-      <h3>${place.name}</h3>
-      <p class="place-role">${place.role}</p>
-      <p class="place-state">向いている状態：${place.state}</p>
-      <p class="place-meta">おすすめ：${place.bestTime}</p>
-      <p class="place-meta">距離感：${place.distanceFeel}</p>
-      <p class="place-caution">注意：${place.caution}</p>
+      <h3>${escapeHtml(place.name)}</h3>
+      <p class="place-role">${escapeHtml(place.role)}</p>
+      <p class="place-state">向いている状態：${escapeHtml(place.state)}</p>
+      <p class="place-meta">おすすめ：${escapeHtml(place.bestTime)}</p>
+      <p class="place-meta">距離感：${escapeHtml(place.distanceFeel)}</p>
+      <p class="place-caution">注意：${escapeHtml(place.caution)}</p>
       <ul class="place-tags">${tags}</ul>
-      <nav class="route-buttons" aria-label="${place.name}へのルート">
+      <nav class="route-buttons" aria-label="${escapeHtml(place.name)}へのルート">
         ${buttons}
       </nav>
     </article>
   `;
 }
 
-if (grid) {
-  grid.innerHTML = places.map(placeCard).join("");
+if (grid && window.places) {
+  grid.innerHTML = window.places.map(placeCard).join("");
 }
