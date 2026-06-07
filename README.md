@@ -2,18 +2,34 @@
 
 画像と短い言葉を、流さずに置いておくための小さなWeb棚です。
 
-この版は `entries.js` 方式です。  
-`index.html` は基本的に触らず、日々の更新は `entries.js` に1件足すだけでできます。
+この版は `data/entries.js` 方式です。  
+`index.html` は基本的に触らず、日々の更新は `data/entries.js` に1件足すだけでできます。
 
 ## 構成
 
 ```text
 okitegami/
 ├── index.html
-├── style.css
-├── entries.js
-├── main.js
+├── style.css                  # shared CSS body; kept as compatibility source
+├── assets/
+│   ├── css/
+│   │   ├── site.css           # top/shared CSS entry point
+│   │   ├── top-responsive.css
+│   │   └── top-weather.css
+│   └── js/
+│       ├── site.js
+│       └── top-weather.js
+├── data/
+│   ├── entries.js
+│   └── site-config.js
 ├── images/
+├── dashboard/
+│   ├── index.html
+│   ├── dashboard.css
+│   ├── dashboard.js
+│   └── data/
+│       ├── connect-apps.js
+│       └── places.js
 ├── weblog/
 ├── recipe/
 ├── sequence/
@@ -35,7 +51,7 @@ okitegami/
 画像ありの場合：
 
 1. `images/` に画像をアップロードする
-2. `entries.js` の `entries = [` の直後に1件追加する
+2. `data/entries.js` の `entries = [` の直後に1件追加する
 
 ```js
 {
@@ -48,6 +64,14 @@ okitegami/
 ```
 
 画像なしの場合は `image: ""` にします。
+
+## dashboard
+
+`dashboard/` は、表ページからはリンクしない制御室です。
+
+- 表示：`dashboard/index.html`
+- データ：`dashboard/data/`
+- 共通設定：`data/site-config.js`
 
 ## zaike feed
 
