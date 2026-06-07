@@ -10,10 +10,9 @@
 ```text
 okitegami/
 ├── index.html
-├── style.css                  # shared CSS body; kept as compatibility source
 ├── assets/
 │   ├── css/
-│   │   ├── site.css           # top/shared CSS entry point
+│   │   ├── site.css           # shared CSS
 │   │   ├── top-responsive.css
 │   │   └── top-weather.css
 │   └── js/
