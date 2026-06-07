@@ -11,7 +11,7 @@
   <header class="dashboard-header">
     <p class="label">control room</p>
     <h1>okitegami dashboard</h1>
-    <p class="lead">表ページの状態を確認するための、公開しても困らない計器盤。</p>
+    <p class="lead">表ページの状態、外部接続、場所カードを確認するための制御室。表の index からはリンクしない。</p>
   </header>
 
   <main class="dashboard-main">
@@ -25,11 +25,6 @@
       </dl>
     </section>
 
-    <section class="dashboard-panel" aria-labelledby="config-title">
-      <h2 id="config-title">config</h2>
-      <pre id="config-view">loading...</pre>
-    </section>
-
     <section class="dashboard-panel" aria-labelledby="checks-title">
       <h2 id="checks-title">checks</h2>
       <ul id="check-list" class="check-list">
@@ -38,10 +33,44 @@
     </section>
 
     <section class="dashboard-panel" aria-labelledby="links-title">
-      <h2 id="links-title">links</h2>
+      <h2 id="links-title">internal links</h2>
+      <p class="panel-note">表には出さず、dashboard からだけ辿る内部リンク。</p>
       <nav id="dashboard-links" class="dashboard-links" aria-label="dashboard links">
         <a href="../index.html">okitegami index</a>
       </nav>
+    </section>
+
+    <section class="dashboard-panel" aria-labelledby="connect-title">
+      <h2 id="connect-title">connect hub</h2>
+      <p class="panel-note">外部の声・場・文脈を、必要なときだけONにする接続盤。</p>
+      <div id="connection-apps" class="connection-grid" aria-live="polite">
+        <p class="loading">接続アプリを読み込み中...</p>
+      </div>
+
+      <section class="carry-line" aria-labelledby="carry-line-title">
+        <h3 id="carry-line-title">今日コピーした1行</h3>
+        <p>外部文脈を全部持ち込まず、1行だけ本体へ戻します。</p>
+        <label class="carry-line-box">
+          <span>one-line copy</span>
+          <textarea id="carry-line-input" rows="3" placeholder="例：他人の反応と同席したかった。"></textarea>
+        </label>
+        <div class="carry-actions">
+          <button id="save-carry-line" type="button">保存</button>
+          <button id="clear-carry-line" type="button">消す</button>
+          <p id="carry-line-status" class="carry-status" aria-live="polite"></p>
+        </div>
+      </section>
+    </section>
+
+    <section class="dashboard-panel" aria-labelledby="place-title">
+      <h2 id="place-title">place deck</h2>
+      <p class="panel-note">行きたい店や場所をカード化して、必要なときだけ Google Maps のルートを開く。</p>
+      <section class="place-grid" id="place-grid" aria-live="polite"></section>
+    </section>
+
+    <section class="dashboard-panel" aria-labelledby="config-title">
+      <h2 id="config-title">config</h2>
+      <pre id="config-view">loading...</pre>
     </section>
   </main>
 
@@ -50,6 +79,8 @@
   </footer>
 
   <script src="../config.js"></script>
+  <script src="connect-apps.js"></script>
+  <script src="places.js"></script>
   <script src="dashboard.js"></script>
 </body>
 </html>
