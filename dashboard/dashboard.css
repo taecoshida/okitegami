@@ -5,16 +5,12 @@ body {
 .dashboard-header,
 .dashboard-main,
 .dashboard-footer {
-  width: min(920px, calc(100% - 32px));
+  width: min(1040px, calc(100% - 32px));
   margin: 0 auto;
 }
 
 .dashboard-header {
   padding: 48px 0 24px;
-}
-
-.dashboard-header h1 {
-  margin-bottom: 8px;
 }
 
 .dashboard-main {
@@ -38,6 +34,17 @@ body {
   text-transform: uppercase;
 }
 
+.panel-note,
+.app-kind,
+.app-description,
+.app-rule,
+.place-state,
+.place-meta,
+.place-caution,
+.carry-status {
+  color: #777;
+}
+
 .status-list {
   display: grid;
   gap: 10px;
@@ -46,7 +53,7 @@ body {
 
 .status-list div {
   display: grid;
-  grid-template-columns: 120px 1fr;
+  grid-template-columns: 140px 1fr;
   gap: 16px;
   padding: 10px 0;
   border-bottom: 1px solid rgba(50, 45, 38, 0.1);
@@ -54,10 +61,6 @@ body {
 
 .status-list div:last-child {
   border-bottom: 0;
-}
-
-.status-list dt {
-  color: #777;
 }
 
 .status-list dd {
@@ -73,35 +76,125 @@ body {
   line-height: 1.55;
 }
 
-.check-list {
-  padding-left: 1.2em;
-}
-
-.check-list li + li {
-  margin-top: 8px;
-}
-
-.dashboard-links {
+.dashboard-links,
+.route-buttons,
+.app-actions,
+.carry-actions {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
 }
 
 .dashboard-links a,
-.dashboard-entry-link {
+.app-link,
+.route-buttons a,
+.status-switch,
+.carry-actions button {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   min-height: 36px;
   padding: 0 14px;
   border: 1px solid rgba(50, 45, 38, 0.16);
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.64);
+  color: inherit;
+  font: inherit;
   text-decoration: none;
 }
 
-.dashboard-entry {
+.connection-grid,
+.place-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 14px;
   margin-top: 18px;
+}
+
+.connection-card,
+.place-card,
+.carry-line {
+  border: 1px solid rgba(50, 45, 38, 0.14);
+  border-radius: 20px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.56);
+}
+
+.connection-card.is-on {
+  background: rgba(255, 255, 255, 0.86);
+}
+
+.connection-card.is-off {
+  opacity: 0.58;
+}
+
+.connection-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.app-meta div {
+  display: flex;
+  gap: 8px;
+}
+
+.app-meta dd {
+  margin: 0;
+}
+
+.carry-line {
+  margin-top: 24px;
+}
+
+.carry-line-box {
+  display: grid;
+  gap: 8px;
+}
+
+.carry-line textarea {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 12px;
+  border: 1px solid rgba(50, 45, 38, 0.16);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.76);
+  color: inherit;
+  font: inherit;
+}
+
+.place-card {
+  display: grid;
+  gap: 12px;
+}
+
+.place-visual {
+  display: grid;
+  place-items: center;
+  min-height: 150px;
+  border: 1px solid rgba(50, 45, 38, 0.12);
+  border-radius: 18px;
+  background: rgba(239, 231, 216, 0.8);
+  color: #777;
   text-align: center;
+}
+
+.place-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.place-tags li {
+  border: 1px solid rgba(50, 45, 38, 0.14);
+  border-radius: 999px;
+  padding: 4px 9px;
+  color: #777;
+  font-size: 0.78rem;
 }
 
 .dashboard-footer {
@@ -113,7 +206,7 @@ body {
   .dashboard-header,
   .dashboard-main,
   .dashboard-footer {
-    width: min(100% - 24px, 920px);
+    width: min(100% - 24px, 1040px);
   }
 
   .status-list div {
