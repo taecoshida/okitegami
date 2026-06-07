@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>okitegami dashboard</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+  <header class="dashboard-header">
+    <p class="label">control room</p>
+    <h1>okitegami dashboard</h1>
+    <p class="lead">表ページの状態を確認するための、公開しても困らない計器盤。</p>
+  </header>
+
+  <main class="dashboard-main">
+    <section class="dashboard-panel" aria-labelledby="status-title">
+      <h2 id="status-title">status</h2>
+      <dl id="status-list" class="status-list">
+        <div>
+          <dt>config</dt>
+          <dd>loading...</dd>
+        </div>
+      </dl>
+    </section>
+
+    <section class="dashboard-panel" aria-labelledby="config-title">
+      <h2 id="config-title">config</h2>
+      <pre id="config-view">loading...</pre>
+    </section>
+
+    <section class="dashboard-panel" aria-labelledby="checks-title">
+      <h2 id="checks-title">checks</h2>
+      <ul id="check-list" class="check-list">
+        <li>checking...</li>
+      </ul>
+    </section>
+
+    <section class="dashboard-panel" aria-labelledby="links-title">
+      <h2 id="links-title">links</h2>
+      <nav id="dashboard-links" class="dashboard-links" aria-label="dashboard links">
+        <a href="../index.html">okitegami index</a>
+      </nav>
+    </section>
+  </main>
+
+  <footer class="dashboard-footer">
+    <p>dashboard / readable control room</p>
+  </footer>
+
+  <script src="../config.js"></script>
+  <script src="dashboard.js"></script>
+</body>
+</html>
