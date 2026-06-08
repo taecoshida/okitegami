@@ -13,7 +13,15 @@ const startButton = document.getElementById('startButton');
 const muteButton = document.getElementById('muteButton');
 const radioButton = document.getElementById('radioButton');
 
+const touchLeft = document.getElementById('touchLeft');
+const touchRight = document.getElementById('touchRight');
+const touchGas = document.getElementById('touchGas');
+const touchBrake = document.getElementById('touchBrake');
+const touchStop = document.getElementById('touchStop');
+const touchRadio = document.getElementById('touchRadio');
+
 const keys = new Set();
+const touch = { left: false, right: false, gas: false, brake: false };
 
 const game = {
   speed: 0,
@@ -66,6 +74,14 @@ const audio = {
   noiseSource: null,
 };
 
+function clamp(value, min, max) {
+  return Math.max(min, Math.min(max, value));
+}
+
+function lerp(a, b, t) {
+  return a + (b - a) * t;
+}
+
 function currentScene() {
   const loopDistance = game.distance % 4800;
   let scene = scenes[0];
@@ -75,16 +91,44 @@ function currentScene() {
   return scene;
 }
 
-function clamp(value, min, max) {
-  return Math.max(min, Math.min(max, value));
-}
-
-function lerp(a, b, t) {
-  return a + (b - a) * t;
-}
-
 function roadCurve(z) {
   return Math.sin((game.distance * 0.0017) + z * 3.2) * 0.32 + Math.sin((game.distance * 0.00053) + z * 8.4) * 0.16;
+}
+
+function shade(hex, amount) {
+  const color = hex.replace('#', '');
+  const num = parseInt(color, 16);
+  const r = clamp((num >> 16) + amount, 0, 255);
+  const g = clamp(((num >> 8) & 0xff) + amount, 0, 255);
+  const b = clamp((num & 0xff) + amount, 0, 255);
+  return `rgb(${r}, ${g}, ${b})`;
+}
+
+function polygon(points) {
+  ctx.beginPath();
+  ctx.moveTo(points[0][0], points[0][1]);
+  for (let i = 1; i < points.length; i++) ctx.lineTo(points[i][0], points[i][1]);
+  ctx.closePath();
+  ctx.fill();
+}
+
+function roundedRect(x, y, width, height, radius) {
+  ctx.beginPath();
+  ctx.moveTo(x + radius, y);
+  ctx.arcTo(x + width, y, x + width, y + height, radius);
+  ctx.arcTo(x + width, y + height, x, y + height, radius);
+  ctx.arcTo(x, y + height, x, y, radius);
+  ctx.arcTo(x, y, x + width, y, radius);
+  ctx.closePath();
+}
+
+function projectRoadPoint(z, roadCenter, horizon, w, h) {
+  const perspective = Math.pow(1 - z, 2.18);
+  const y = lerp(horizon, h + 80, perspective);
+  const width = lerp(42, w * 1.12, perspective);
+  const curve = roadCurve(z) * width * 0.28;
+  const center = roadCenter + curve;
+  return { y, width, center, left: center - width / 2, right: center + width / 2 };
 }
 
 function drawBackground(scene, w, h) {
@@ -102,8 +146,7 @@ function drawBackground(scene, w, h) {
   for (let i = 0; i < 46; i++) {
     const x = (i * 127 + Math.floor(game.distance * 0.02)) % w;
     const y = 18 + ((i * 47) % Math.floor(horizon - 42));
-    const size = (i % 4 === 0) ? 2 : 1;
-    ctx.fillRect(x, y, size, size);
+    ctx.fillRect(x, y, i % 4 === 0 ? 2 : 1, i % 4 === 0 ? 2 : 1);
   }
 
   drawSkyline(scene, w, horizon);
@@ -122,9 +165,7 @@ function drawSkyline(scene, w, horizon) {
     ctx.fillStyle = i % 2 ? 'rgba(106,227,255,0.28)' : 'rgba(255,79,216,0.23)';
     for (let wy = y + 16; wy < horizon - 10; wy += 22) {
       for (let wx = x + 13; wx < x + bw - 12; wx += 22) {
-        if ((Math.floor(wx + wy + game.distance * 0.02) % 3) !== 0) {
-          ctx.fillRect(wx, wy, 7, 3);
-        }
+        if ((Math.floor(wx + wy + game.distance * 0.02) % 3) !== 0) ctx.fillRect(wx, wy, 7, 3);
       }
     }
   }
@@ -144,59 +185,38 @@ function drawRoad(scene, w, h) {
   const rows = 82;
 
   for (let i = rows; i >= 1; i--) {
-    const z1 = i / rows;
-    const z2 = (i - 1) / rows;
-    const p1 = projectRoadPoint(z1, roadCenter, horizon, w, h);
-    const p2 = projectRoadPoint(z2, roadCenter, horizon, w, h);
+    const p1 = projectRoadPoint(i / rows, roadCenter, horizon, w, h);
+    const p2 = projectRoadPoint((i - 1) / rows, roadCenter, horizon, w, h);
 
     ctx.fillStyle = i % 2 === 0 ? scene.road : shade(scene.road, 12);
-    polygon([
-      [p1.left, p1.y], [p1.right, p1.y], [p2.right, p2.y], [p2.left, p2.y]
-    ]);
+    polygon([[p1.left, p1.y], [p1.right, p1.y], [p2.right, p2.y], [p2.left, p2.y]]);
 
     ctx.fillStyle = i % 2 === 0 ? 'rgba(255,255,255,0.08)' : 'rgba(255,255,255,0.04)';
-    polygon([
-      [p1.left - p1.width * 0.08, p1.y], [p1.left, p1.y], [p2.left, p2.y], [p2.left - p2.width * 0.08, p2.y]
-    ]);
-    polygon([
-      [p1.right, p1.y], [p1.right + p1.width * 0.08, p1.y], [p2.right + p2.width * 0.08, p2.y], [p2.right, p2.y]
-    ]);
+    polygon([[p1.left - p1.width * 0.08, p1.y], [p1.left, p1.y], [p2.left, p2.y], [p2.left - p2.width * 0.08, p2.y]]);
+    polygon([[p1.right, p1.y], [p1.right + p1.width * 0.08, p1.y], [p2.right + p2.width * 0.08, p2.y], [p2.right, p2.y]]);
 
     const stripePulse = Math.floor((game.distance * 0.24 + i * 14) / 28) % 2 === 0;
     if (stripePulse) {
       ctx.fillStyle = 'rgba(255,255,255,0.75)';
-      const c1 = p1.center;
-      const c2 = p2.center;
       const sw1 = Math.max(1, p1.width * 0.012);
       const sw2 = Math.max(1, p2.width * 0.012);
-      polygon([
-        [c1 - sw1, p1.y], [c1 + sw1, p1.y], [c2 + sw2, p2.y], [c2 - sw2, p2.y]
-      ]);
+      polygon([[p1.center - sw1, p1.y], [p1.center + sw1, p1.y], [p2.center + sw2, p2.y], [p2.center - sw2, p2.y]]);
     }
   }
 
   drawRoadsideObjects(scene, w, h, horizon, roadCenter);
 }
 
-function projectRoadPoint(z, roadCenter, horizon, w, h) {
-  const perspective = Math.pow(1 - z, 2.18);
-  const y = lerp(horizon, h + 80, perspective);
-  const width = lerp(42, w * 1.12, perspective);
-  const curve = roadCurve(z) * width * 0.28;
-  const center = roadCenter + curve;
-  return { y, width, center, left: center - width / 2, right: center + width / 2 };
-}
-
 function drawRoadsideObjects(scene, w, h, horizon, roadCenter) {
   for (let i = 0; i < 26; i++) {
     const lane = i % 2 === 0 ? -1 : 1;
-    const z = ((i * 0.071 + (game.distance * 0.00034)) % 1);
+    const z = (i * 0.071 + game.distance * 0.00034) % 1;
+    if (z > 0.96) continue;
     const p = projectRoadPoint(z, roadCenter, horizon, w, h);
     const scale = Math.pow(1 - z, 2.25);
     const x = lane < 0 ? p.left - 45 - scale * 190 : p.right + 45 + scale * 190;
     const y = p.y;
 
-    if (z > 0.96) continue;
     if (i % 3 === 0) drawStreetLight(x, y, scale, scene.glow, lane);
     if (i % 4 === 1) drawSign(x, y, scale, scene.signs[i % scene.signs.length], scene.glow);
     if (i % 5 === 2) drawBuildingBlock(x, y, scale, scene.glow);
@@ -252,9 +272,7 @@ function drawCar(w, h) {
   const y = h * 0.82;
   ctx.save();
   ctx.translate(x, y);
-
-  const speedTilt = game.lateral * 0.04;
-  ctx.rotate(speedTilt);
+  ctx.rotate(game.lateral * 0.04);
 
   ctx.fillStyle = 'rgba(0,0,0,0.42)';
   ctx.beginPath();
@@ -283,7 +301,6 @@ function drawCar(w, h) {
   ctx.moveTo(-35, 36);
   ctx.lineTo(35, 36);
   ctx.stroke();
-
   ctx.restore();
 }
 
@@ -305,43 +322,15 @@ function drawOverlay(scene, w, h) {
   ctx.globalAlpha = 1;
 }
 
-function shade(hex, amount) {
-  const color = hex.replace('#', '');
-  const num = parseInt(color, 16);
-  const r = clamp((num >> 16) + amount, 0, 255);
-  const g = clamp(((num >> 8) & 0xff) + amount, 0, 255);
-  const b = clamp((num & 0xff) + amount, 0, 255);
-  return `rgb(${r}, ${g}, ${b})`;
-}
-
-function polygon(points) {
-  ctx.beginPath();
-  ctx.moveTo(points[0][0], points[0][1]);
-  for (let i = 1; i < points.length; i++) ctx.lineTo(points[i][0], points[i][1]);
-  ctx.closePath();
-  ctx.fill();
-}
-
-function roundedRect(x, y, width, height, radius) {
-  ctx.beginPath();
-  ctx.moveTo(x + radius, y);
-  ctx.arcTo(x + width, y, x + width, y + height, radius);
-  ctx.arcTo(x + width, y + height, x, y + height, radius);
-  ctx.arcTo(x, y + height, x, y, radius);
-  ctx.arcTo(x, y, x + width, y, radius);
-  ctx.closePath();
-}
-
 function update(dt) {
-  const accelerating = keys.has('w') || keys.has('arrowup');
-  const braking = keys.has('s') || keys.has('arrowdown');
-  const left = keys.has('a') || keys.has('arrowleft');
-  const right = keys.has('d') || keys.has('arrowright');
+  const accelerating = keys.has('w') || keys.has('arrowup') || touch.gas;
+  const braking = keys.has('s') || keys.has('arrowdown') || touch.brake;
+  const left = keys.has('a') || keys.has('arrowleft') || touch.left;
+  const right = keys.has('d') || keys.has('arrowright') || touch.right;
 
   if (accelerating && game.fuel > 0) game.speed += 82 * dt;
   else game.speed -= 28 * dt;
   if (braking) game.speed -= 105 * dt;
-
   game.speed = clamp(game.speed, 0, game.maxSpeed);
 
   const steerStrength = 1.45 * dt * (0.28 + game.speed / game.maxSpeed);
@@ -408,7 +397,6 @@ function loop(now) {
 
 function initAudio() {
   if (game.audioReady) return;
-
   const AudioContext = window.AudioContext || window.webkitAudioContext;
   if (!AudioContext) {
     radioLog.textContent = '[audio] Web Audio API is not available in this browser.';
@@ -445,16 +433,14 @@ function initAudio() {
   audio.noiseSource.start();
 
   game.audioReady = true;
-  radioLog.textContent = '[engine] audio context online. W / ↑ to accelerate.';
+  radioLog.textContent = '[engine] audio context online. W / ↑ or GAS to accelerate.';
 }
 
 function makeNoiseBuffer(audioContext, seconds) {
   const sampleRate = audioContext.sampleRate;
   const buffer = audioContext.createBuffer(1, sampleRate * seconds, sampleRate);
   const data = buffer.getChannelData(0);
-  for (let i = 0; i < data.length; i++) {
-    data[i] = Math.random() * 2 - 1;
-  }
+  for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
   return buffer;
 }
 
@@ -472,7 +458,6 @@ function updateAudio() {
 
 function blip(type = 'ui') {
   if (!game.audioReady || game.muted || !audio.ctx) return;
-
   const osc = audio.ctx.createOscillator();
   const gain = audio.ctx.createGain();
   const now = audio.ctx.currentTime;
@@ -487,7 +472,6 @@ function blip(type = 'ui') {
   gain.connect(audio.master);
   osc.start(now);
   osc.stop(now + 0.42);
-
   if (type === 'radio') radioStaticBurst();
 }
 
@@ -526,29 +510,57 @@ function triggerStopEvent() {
   blip('stop');
 }
 
-startButton.addEventListener('click', async () => {
+async function startEngine() {
   initAudio();
   if (audio.ctx && audio.ctx.state === 'suspended') await audio.ctx.resume();
   startButton.textContent = 'ENGINE ON';
   blip('ui');
-});
+}
 
-muteButton.addEventListener('click', () => {
+function toggleMute() {
   game.muted = !game.muted;
   muteButton.textContent = game.muted ? 'UNMUTE' : 'MUTE';
   radioLog.textContent = game.muted ? '[audio] muted.' : '[audio] unmuted.';
-});
+}
 
+function bindHoldButton(button, flag) {
+  if (!button) return;
+  const press = async (event) => {
+    event.preventDefault();
+    if (!game.audioReady && flag === 'gas') await startEngine();
+    touch[flag] = true;
+    button.classList.add('is-pressed');
+  };
+  const release = (event) => {
+    if (event) event.preventDefault();
+    touch[flag] = false;
+    button.classList.remove('is-pressed');
+  };
+
+  button.addEventListener('pointerdown', press);
+  button.addEventListener('pointerup', release);
+  button.addEventListener('pointercancel', release);
+  button.addEventListener('pointerleave', release);
+  button.addEventListener('contextmenu', (event) => event.preventDefault());
+}
+
+startButton.addEventListener('click', startEngine);
+muteButton.addEventListener('click', toggleMute);
 radioButton.addEventListener('click', triggerRadio);
+touchStop?.addEventListener('click', triggerStopEvent);
+touchRadio?.addEventListener('click', triggerRadio);
+
+bindHoldButton(touchLeft, 'left');
+bindHoldButton(touchRight, 'right');
+bindHoldButton(touchGas, 'gas');
+bindHoldButton(touchBrake, 'brake');
 
 window.addEventListener('keydown', (event) => {
   const key = event.key.toLowerCase();
-  if (['arrowup', 'arrowdown', 'arrowleft', 'arrowright', ' ', 'w', 'a', 's', 'd'].includes(key)) {
-    event.preventDefault();
-  }
+  if (['arrowup', 'arrowdown', 'arrowleft', 'arrowright', ' ', 'w', 'a', 's', 'd'].includes(key)) event.preventDefault();
   if (key === ' ') triggerStopEvent();
   else if (key === 'r') triggerRadio();
-  else if (key === 'm') muteButton.click();
+  else if (key === 'm') toggleMute();
   else keys.add(key);
 });
 
@@ -568,5 +580,6 @@ function resizeCanvasForDisplay() {
 }
 
 window.addEventListener('resize', resizeCanvasForDisplay);
+window.addEventListener('orientationchange', () => setTimeout(resizeCanvasForDisplay, 250));
 resizeCanvasForDisplay();
 requestAnimationFrame(loop);
