@@ -2,6 +2,11 @@
   --compact-width: 760px;
 }
 
+html,
+body {
+  touch-action: manipulation;
+}
+
 .shell {
   width: min(var(--compact-width), calc(100vw - 32px));
   padding: 18px 0 24px;
@@ -78,6 +83,39 @@ canvas {
   font-size: 0.82rem;
 }
 
+.touch-controls {
+  display: none;
+  width: min(680px, 100%);
+  margin: 10px auto 0;
+  padding: 10px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--panel);
+  box-shadow: 0 0 28px rgba(106, 227, 255, 0.08), inset 0 0 32px rgba(106, 227, 255, 0.03);
+  backdrop-filter: blur(16px);
+}
+
+.touch-button {
+  min-height: 56px;
+  border-radius: 16px;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  touch-action: none;
+}
+
+.touch-button.gas {
+  border-color: rgba(255,79,216,0.5);
+  background: linear-gradient(180deg, rgba(255,79,216,0.23), rgba(255,79,216,0.06));
+}
+
+.touch-button.small {
+  min-height: 42px;
+  font-size: 0.72rem;
+}
+
 .help-panel {
   width: min(680px, 100%);
   margin: 10px auto 0;
@@ -90,7 +128,16 @@ canvas {
   padding: 6px 9px;
 }
 
-@media (max-width: 760px) {
+@media (max-width: 760px), (pointer: coarse) {
+  body {
+    overscroll-behavior: none;
+  }
+
+  .shell {
+    width: min(100% - 20px, 680px);
+    padding-top: 10px;
+  }
+
   .topbar {
     display: block;
   }
@@ -105,6 +152,65 @@ canvas {
   }
 
   .button-card {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+
+  .button-card button:first-child {
+    grid-column: 1 / -1;
+  }
+
+  .touch-controls {
+    display: grid;
+  }
+
+  .help-panel span:not(:last-child) {
+    display: none;
+  }
+}
+
+@media (max-width: 420px) {
+  .hud-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .hud-grid div {
+    padding: 7px 6px;
+  }
+
+  .hud-grid span {
+    font-size: 0.6rem;
+  }
+
+  .hud-grid strong {
+    font-size: 0.9rem;
+  }
+
+  .control-deck {
+    gap: 8px;
+  }
+
+  .avatar-card {
+    gap: 10px;
+  }
+
+  .avatar-face {
+    width: 52px;
+    height: 52px;
+    font-size: 2rem;
+  }
+
+  .touch-controls {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 7px;
+  }
+
+  .touch-button {
+    min-height: 52px;
+    padding-inline: 6px;
+    font-size: 0.72rem;
+  }
+
+  .touch-button.small {
+    grid-column: span 2;
   }
 }
