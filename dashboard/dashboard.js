@@ -11,7 +11,7 @@ const deckOrderToggle = document.getElementById("deck-order-toggle");
 
 const APP_STATUS_STORAGE_KEY = "okitegami-dashboard-connect-status";
 const DECK_ORDER_STORAGE_KEY = "okitegami-dashboard-deck-order";
-const DECK_ORDER_TOGGLE_LABEL = "deck の重心を切り替える";
+const DECK_ORDER_TOGGLE_LABEL = "重心を切り替える";
 
 function escapeHtml(value) {
   return String(value ?? "")
