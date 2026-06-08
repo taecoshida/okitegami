@@ -1,0 +1,107 @@
+.quiet-links .simulator-link {
+  position: relative;
+  grid-column: 1 / -1;
+  grid-template-columns: 108px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+  min-height: 112px;
+  padding: 12px 14px;
+  border-radius: 24px;
+  color: #eef6ff;
+  background:
+    radial-gradient(circle at 18% 18%, rgba(106, 227, 255, 0.26), transparent 42%),
+    radial-gradient(circle at 86% 12%, rgba(255, 79, 216, 0.26), transparent 38%),
+    linear-gradient(140deg, #080b14, #121827 58%, #07080f);
+  border-color: rgba(49, 45, 71, 0.38);
+  box-shadow: 0 18px 36px rgba(30, 18, 45, 0.16);
+  overflow: hidden;
+}
+
+.quiet-links .simulator-link:hover {
+  background:
+    radial-gradient(circle at 18% 18%, rgba(106, 227, 255, 0.34), transparent 42%),
+    radial-gradient(circle at 86% 12%, rgba(255, 79, 216, 0.34), transparent 38%),
+    linear-gradient(140deg, #090e1a, #161d32 58%, #080910);
+}
+
+.simulator-thumb {
+  position: relative;
+  display: block;
+  width: 108px;
+  aspect-ratio: 16 / 10;
+  border: 1px solid rgba(106, 227, 255, 0.32);
+  border-radius: 16px;
+  background:
+    linear-gradient(180deg, #081126 0 42%, #07090f 42% 100%);
+  box-shadow: inset 0 0 24px rgba(106, 227, 255, 0.08);
+  overflow: hidden;
+}
+
+.simulator-thumb::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -12%;
+  width: 86%;
+  height: 72%;
+  transform: translateX(-50%);
+  clip-path: polygon(44% 0, 56% 0, 100% 100%, 0 100%);
+  background: linear-gradient(90deg, transparent 0 47%, rgba(255,255,255,0.76) 48% 52%, transparent 53% 100%), #151923;
+}
+
+.simulator-thumb::after {
+  content: "START";
+  position: absolute;
+  right: 8px;
+  top: 7px;
+  color: #6ae3ff;
+  font: 700 9px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+  letter-spacing: 0.12em;
+  text-shadow: 0 0 12px rgba(106, 227, 255, 0.8);
+}
+
+.simulator-copy {
+  display: grid;
+  gap: 6px;
+}
+
+.quiet-links .simulator-link .shelf-label {
+  color: #f7fbff;
+  font-size: 1.05rem;
+  letter-spacing: 0.02em;
+}
+
+.quiet-links .simulator-link .shelf-text {
+  color: rgba(238, 246, 255, 0.7);
+}
+
+.simulator-badge {
+  display: inline-grid;
+  place-items: center;
+  min-width: 74px;
+  padding: 7px 10px;
+  border: 1px solid rgba(255, 79, 216, 0.38);
+  border-radius: 999px;
+  color: #ffb8f0;
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: rgba(255, 79, 216, 0.08);
+}
+
+@media (max-width: 560px) {
+  .quiet-links .simulator-link {
+    grid-template-columns: 1fr;
+    width: min(320px, 100%);
+    justify-self: center;
+    border-radius: 22px;
+  }
+
+  .simulator-thumb {
+    width: 100%;
+  }
+
+  .simulator-badge {
+    justify-self: start;
+  }
+}
