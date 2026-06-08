@@ -11,6 +11,7 @@ const deckOrderToggle = document.getElementById("deck-order-toggle");
 
 const APP_STATUS_STORAGE_KEY = "okitegami-dashboard-connect-status";
 const DECK_ORDER_STORAGE_KEY = "okitegami-dashboard-deck-order";
+const DECK_ORDER_TOGGLE_LABEL = "deck の重心を切り替える";
 
 function escapeHtml(value) {
   return String(value ?? "")
@@ -75,12 +76,11 @@ function applyDeckOrder(order) {
 
   if (placeFirst) {
     connectionDeckGroup.parentNode.insertBefore(placesDeckGroup, connectionDeckGroup);
-    deckOrderToggle.textContent = "connection cards を上にする";
   } else {
     placesDeckGroup.parentNode.insertBefore(connectionDeckGroup, placesDeckGroup);
-    deckOrderToggle.textContent = "place cards を上にする";
   }
 
+  deckOrderToggle.textContent = DECK_ORDER_TOGGLE_LABEL;
   deckOrderToggle.setAttribute("aria-pressed", String(placeFirst));
 }
 
