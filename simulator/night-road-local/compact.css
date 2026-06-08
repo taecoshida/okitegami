@@ -1,0 +1,110 @@
+:root {
+  --compact-width: 760px;
+}
+
+.shell {
+  width: min(var(--compact-width), calc(100vw - 32px));
+  padding: 18px 0 24px;
+}
+
+.topbar {
+  align-items: center;
+  padding: 14px 16px;
+  border-radius: 22px 22px 10px 10px;
+}
+
+h1 {
+  font-size: clamp(1.8rem, 5vw, 3.2rem);
+}
+
+.hud-grid {
+  grid-template-columns: repeat(4, minmax(64px, 1fr));
+  min-width: min(360px, 100%);
+  gap: 8px;
+}
+
+.hud-grid div {
+  padding: 8px 10px;
+}
+
+.hud-grid strong {
+  font-size: 1rem;
+}
+
+.drive-panel {
+  width: min(680px, 100%);
+  margin: 10px auto 0;
+  border-radius: 14px;
+}
+
+canvas {
+  aspect-ratio: 16 / 9;
+}
+
+.control-deck {
+  width: min(680px, 100%);
+  margin: 10px auto 0;
+  grid-template-columns: 0.9fr 1.2fr;
+  padding: 10px;
+}
+
+.button-card {
+  grid-column: 1 / -1;
+  min-height: auto;
+  grid-template-columns: 1.2fr 1fr 1fr;
+}
+
+.button-card button:first-child {
+  grid-column: auto;
+}
+
+.avatar-card,
+.radio-card,
+.button-card {
+  min-height: 96px;
+  padding: 12px;
+  border-radius: 16px;
+}
+
+.avatar-face {
+  width: 64px;
+  height: 64px;
+  border-radius: 18px;
+  font-size: 2.35rem;
+}
+
+.radio-log {
+  min-height: 56px;
+  font-size: 0.82rem;
+}
+
+.help-panel {
+  width: min(680px, 100%);
+  margin: 10px auto 0;
+  padding: 10px;
+}
+
+.help-panel span,
+.help-panel a {
+  font-size: 0.76rem;
+  padding: 6px 9px;
+}
+
+@media (max-width: 760px) {
+  .topbar {
+    display: block;
+  }
+
+  .hud-grid {
+    margin-top: 12px;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .control-deck {
+    grid-template-columns: 1fr;
+  }
+
+  .button-card {
+    grid-template-columns: 1fr;
+  }
+}
