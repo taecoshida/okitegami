@@ -5,8 +5,12 @@ const checkList = document.getElementById("check-list");
 const links = document.getElementById("dashboard-links");
 const appsContainer = document.getElementById("connection-apps");
 const placeGrid = document.getElementById("place-grid");
+const connectionDeckGroup = document.getElementById("connection-deck-group");
+const placesDeckGroup = document.getElementById("places-deck-group");
+const deckOrderToggle = document.getElementById("deck-order-toggle");
 
 const APP_STATUS_STORAGE_KEY = "okitegami-dashboard-connect-status";
+const DECK_ORDER_STORAGE_KEY = "okitegami-dashboard-deck-order";
 
 function escapeHtml(value) {
   return String(value ?? "")
@@ -48,6 +52,50 @@ function localStorageAvailable() {
   }
 }
 
+function getDeckOrder() {
+  try {
+    return localStorage.getItem(DECK_ORDER_STORAGE_KEY) || "connection-first";
+  } catch (error) {
+    return "connection-first";
+  }
+}
+
+function saveDeckOrder(order) {
+  try {
+    localStorage.setItem(DECK_ORDER_STORAGE_KEY, order);
+  } catch (error) {
+    console.warn("dashboard deck order could not be saved", error);
+  }
+}
+
+function applyDeckOrder(order) {
+  if (!connectionDeckGroup || !placesDeckGroup || !deckOrderToggle) return;
+
+  const placeFirst = order === "place-first";
+
+  if (placeFirst) {
+    connectionDeckGroup.parentNode.insertBefore(placesDeckGroup, connectionDeckGroup);
+    deckOrderToggle.textContent = "connection cards を上にする";
+  } else {
+    placesDeckGroup.parentNode.insertBefore(connectionDeckGroup, placesDeckGroup);
+    deckOrderToggle.textContent = "place cards を上にする";
+  }
+
+  deckOrderToggle.setAttribute("aria-pressed", String(placeFirst));
+}
+
+function initializeDeckOrderToggle() {
+  if (!deckOrderToggle) return;
+
+  applyDeckOrder(getDeckOrder());
+
+  deckOrderToggle.addEventListener("click", () => {
+    const nextOrder = getDeckOrder() === "place-first" ? "connection-first" : "place-first";
+    saveDeckOrder(nextOrder);
+    applyDeckOrder(nextOrder);
+  });
+}
+
 function renderConfig() {
   if (!config) {
     if (configView) configView.textContent = "config not found";
@@ -61,6 +109,7 @@ function renderConfig() {
   const apps = window.OKITEGAMI_CONNECTION_APPS || [];
   const places = window.OKITEGAMI_PLACES || [];
   const deckCount = apps.length + places.length;
+  const deckOrder = getDeckOrder() === "place-first" ? "place first" : "connection first";
 
   setStatus([
     ["site", config.siteTitle || "unknown"],
@@ -68,6 +117,7 @@ function renderConfig() {
     ["weather", config.weather && config.weather.enabled ? "ON" : "OFF"],
     ["entries", config.entriesSource || "not set"],
     ["deck", `${deckCount} cards`],
+    ["deck order", deckOrder],
     ["places", `${places.length} cards`]
   ]);
 
@@ -76,6 +126,7 @@ function renderConfig() {
     config.weather && config.weather.enabled ? "weather is ON" : "weather is OFF",
     config.entriesSource ? `entries source: ${config.entriesSource}` : "entries source not set",
     localStorageAvailable() ? "localStorage available" : "localStorage unavailable",
+    `deck order: ${deckOrder}`,
     `connection cards: ${apps.length}`,
     `place cards: ${places.length}`
   ];
@@ -221,6 +272,7 @@ function renderPlaceDeck() {
   placeGrid.innerHTML = places.map(placeCard).join("");
 }
 
+initializeDeckOrderToggle();
 renderConfig();
 renderConnectionApps();
 renderPlaceDeck();
