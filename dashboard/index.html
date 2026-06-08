@@ -12,7 +12,7 @@
     <div class="dashboard-title-block">
       <p class="label">control room</p>
       <h1>dashboard</h1>
-      <p class="lead">表ページの状態と、必要な接続先・行き先カードだけを確認する制御室。表の index からはリンクしない。</p>
+      <p class="lead">state / deck / routes</p>
     </div>
 
     <nav class="dashboard-nav" aria-label="dashboard sections">
@@ -48,12 +48,11 @@
 
     <section class="dashboard-panel links-panel" aria-labelledby="links-title">
       <div class="panel-heading">
-        <p class="panel-kicker">private shelf</p>
-        <h2 id="links-title">internal links</h2>
+        <p class="panel-kicker">shelf</p>
+        <h2 id="links-title">links</h2>
       </div>
-      <p class="panel-note">表には出さず、dashboard からだけ辿る内部リンク。</p>
       <nav id="dashboard-links" class="dashboard-links" aria-label="dashboard links">
-        <a href="../index.html">okitegami index</a>
+        <a href="../index.html">index</a>
       </nav>
     </section>
 
@@ -64,25 +63,31 @@
           <h2 id="deck-title">deck</h2>
         </div>
         <div class="deck-order-control">
-          <p class="panel-note">必要な接続先と行き先を、1つのカード棚にまとめる。外へ出る前の軽い操作盤。</p>
+          <p class="panel-note">connect / place / route</p>
           <button id="deck-order-toggle" class="deck-order-button" type="button" aria-pressed="false">deck の重心を切り替える</button>
         </div>
       </div>
 
       <section id="connection-deck-group" class="deck-group" aria-labelledby="connection-title">
         <div class="deck-group-heading">
-          <h3 id="connection-title">connection cards</h3>
-          <p>状態確認と制作導線。</p>
+          <div>
+            <p class="panel-kicker">connect</p>
+            <h3 id="connection-title">connection cards</h3>
+          </div>
+          <p>ON / OFF</p>
         </div>
         <div id="connection-apps" class="connection-grid" aria-live="polite">
-          <p class="loading">接続カードを読み込み中...</p>
+          <p class="loading">loading...</p>
         </div>
       </section>
 
       <section id="places-deck-group" class="deck-group" aria-labelledby="places-title">
         <div class="deck-group-heading">
-          <h3 id="places-title">place cards</h3>
-          <p>飯・着席・魚と米の候補。</p>
+          <div>
+            <p class="panel-kicker">place</p>
+            <h3 id="places-title">place cards</h3>
+          </div>
+          <p>walk / bike / transit</p>
         </div>
         <div class="place-grid" id="place-grid" aria-live="polite"></div>
       </section>
@@ -92,7 +97,7 @@
       <details>
         <summary>
           <span>
-            <span class="panel-kicker">raw settings</span>
+            <span class="panel-kicker">raw</span>
             <strong id="config-title">config</strong>
           </span>
           <span class="summary-hint">open</span>
@@ -103,7 +108,7 @@
   </main>
 
   <footer class="dashboard-footer">
-    <p>dashboard / readable control room</p>
+    <p>dashboard / control room</p>
   </footer>
 
   <script src="../data/site-config.js"></script>
