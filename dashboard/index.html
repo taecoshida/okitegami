@@ -63,10 +63,13 @@
           <p class="panel-kicker">control deck</p>
           <h2 id="deck-title">deck</h2>
         </div>
-        <p class="panel-note">必要な接続先と行き先を、1つのカード棚にまとめる。外へ出る前の軽い操作盤。</p>
+        <div class="deck-order-control">
+          <p class="panel-note">必要な接続先と行き先を、1つのカード棚にまとめる。外へ出る前の軽い操作盤。</p>
+          <button id="deck-order-toggle" class="deck-order-button" type="button" aria-pressed="false">place cards を上にする</button>
+        </div>
       </div>
 
-      <section class="deck-group" aria-labelledby="connection-title">
+      <section id="connection-deck-group" class="deck-group" aria-labelledby="connection-title">
         <div class="deck-group-heading">
           <h3 id="connection-title">connection cards</h3>
           <p>状態確認と制作導線。</p>
@@ -76,7 +79,7 @@
         </div>
       </section>
 
-      <section class="deck-group" aria-labelledby="places-title">
+      <section id="places-deck-group" class="deck-group" aria-labelledby="places-title">
         <div class="deck-group-heading">
           <h3 id="places-title">place cards</h3>
           <p>飯・着席・魚と米の候補。</p>
