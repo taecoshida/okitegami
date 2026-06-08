@@ -1,5 +1,13 @@
 const weblogPosts = [
   {
+    date: "2026-06-08",
+    title: "老成寺と少年神社",
+    description: "老成寺に住み、少年神社へ散歩する。座れるけど、まだ押せる。",
+    href: "2026-06-08-rouseiji-to-shounen-jinja.html",
+    image: "images/2026-06-08-rouseiji-to-shounen-jinja.png",
+    tags: ["weblog", "parable", "life-os", "play"]
+  },
+  {
     date: "2026-05-31",
     title: "観察あるいは上演",
     description: "ストーリーはなかった。けれど、シークエンスがあり、終わりがあった。",
