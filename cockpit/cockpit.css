@@ -1,0 +1,259 @@
+body {
+  background:
+    radial-gradient(circle at top left, rgba(255,255,255,.9), transparent 32rem),
+    linear-gradient(135deg, #f3efe7, #e8dfd1);
+}
+
+.cockpit-header,
+.cockpit-main,
+.cockpit-footer {
+  width: min(1180px, calc(100% - 32px));
+  margin: 0 auto;
+}
+
+.cockpit-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 24px;
+  align-items: end;
+  padding: 48px 0 22px;
+}
+
+.cockpit-title-block h1 {
+  margin-bottom: 10px;
+}
+
+.cockpit-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.cockpit-nav a,
+.action-card,
+#reset-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+  padding: 0 14px;
+  border: 1px solid rgba(50,45,38,.16);
+  border-radius: 999px;
+  background: rgba(255,255,255,.72);
+  color: inherit;
+  font: inherit;
+  text-decoration: none;
+}
+
+.cockpit-main {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 18px;
+  padding-bottom: 48px;
+}
+
+.cockpit-panel {
+  background: rgba(255,255,255,.78);
+  border: 1px solid rgba(50,45,38,.13);
+  border-radius: 24px;
+  padding: 20px;
+  box-shadow: 0 14px 34px rgba(40,34,24,.06);
+}
+
+.outside-panel,
+.state-panel,
+.move-panel,
+.make-panel {
+  grid-column: span 6;
+}
+
+.close-panel,
+.command-panel {
+  grid-column: 1 / -1;
+}
+
+.panel-heading {
+  margin-bottom: 14px;
+}
+
+.panel-heading-row {
+  display: grid;
+  grid-template-columns: minmax(180px,.42fr) minmax(0,1fr);
+  gap: 16px;
+  align-items: end;
+}
+
+.panel-kicker {
+  margin: 0 0 5px;
+  color: #8a8274;
+  font-size: .72rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.cockpit-panel h2 {
+  margin: 0;
+  font-size: 1.05rem;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+}
+
+.panel-note {
+  margin: 0;
+  color: #777;
+}
+
+.instrument-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.instrument {
+  display: grid;
+  gap: 6px;
+  padding: 12px;
+  border: 1px solid rgba(50,45,38,.1);
+  border-radius: 18px;
+  background: rgba(255,255,255,.54);
+}
+
+.instrument.wide {
+  grid-column: 1 / -1;
+}
+
+.instrument span {
+  color: #8a8274;
+  font-size: .78rem;
+  letter-spacing: .08em;
+}
+
+.instrument output {
+  font-size: 1.3rem;
+  font-weight: 750;
+  letter-spacing: -.02em;
+}
+
+.instrument input,
+.instrument select,
+.instrument textarea {
+  width: 100%;
+  border: 0;
+  border-radius: 12px;
+  background: rgba(255,255,255,.72);
+  color: inherit;
+  font: inherit;
+  padding: 8px 10px;
+}
+
+.instrument textarea {
+  resize: vertical;
+}
+
+.action-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+}
+
+.action-card {
+  flex-direction: column;
+  align-items: flex-start;
+  min-height: 104px;
+  padding: 16px;
+  border-radius: 20px;
+  text-align: left;
+}
+
+.action-card span {
+  font-size: 1.05rem;
+  font-weight: 750;
+}
+
+.action-card small {
+  margin-top: 6px;
+  color: #777;
+}
+
+.action-card:hover,
+.action-card.is-selected {
+  background: rgba(255,255,255,.96);
+  border-color: rgba(50,45,38,.28);
+}
+
+.action-card.is-button {
+  cursor: pointer;
+}
+
+.cockpit-note {
+  margin-top: 14px;
+}
+
+.close-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.close-grid label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 52px;
+  padding: 0 14px;
+  border: 1px solid rgba(50,45,38,.12);
+  border-radius: 18px;
+  background: rgba(255,255,255,.58);
+}
+
+.command-question {
+  margin: 0;
+  font-size: clamp(1.1rem, 3vw, 1.7rem);
+  letter-spacing: -.03em;
+}
+
+.position-output {
+  margin: 16px 0 0;
+  padding: 14px 16px;
+  border: 1px solid rgba(50,45,38,.12);
+  border-radius: 18px;
+  background: rgba(255,255,255,.66);
+  color: #6e675d;
+  font-weight: 750;
+}
+
+.cockpit-footer {
+  padding: 0 0 42px;
+  color: #8a8274;
+  font-size: .86rem;
+}
+
+@media (max-width: 820px) {
+  .cockpit-header,
+  .panel-heading-row {
+    grid-template-columns: 1fr;
+  }
+
+  .cockpit-nav {
+    justify-content: flex-start;
+  }
+
+  .outside-panel,
+  .state-panel,
+  .move-panel,
+  .make-panel {
+    grid-column: 1 / -1;
+  }
+
+  .close-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .instrument-grid,
+  .close-grid {
+    grid-template-columns: 1fr;
+  }
+}

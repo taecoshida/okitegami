@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>cockpit</title>
+  <link rel="stylesheet" href="../assets/css/site.css">
+  <link rel="stylesheet" href="cockpit.css">
+</head>
+<body>
+  <header class="cockpit-header">
+    <div class="cockpit-title-block">
+      <p class="label">life simulator / position board</p>
+      <h1>cockpit</h1>
+      <p class="lead">外界と状態を見て、行動と制作を選び、店じまいで閉じる。表の index からはリンクしない、1画面の生活操縦席。</p>
+    </div>
+    <nav class="cockpit-nav" aria-label="cockpit sections">
+      <a href="#outside-title">外界</a>
+      <a href="#state-title">状態</a>
+      <a href="#move-title">行動</a>
+      <a href="#make-title">制作</a>
+      <a href="#close-title">店じまい</a>
+    </nav>
+  </header>
+
+  <main class="cockpit-main">
+    <section class="cockpit-panel outside-panel" aria-labelledby="outside-title">
+      <div class="panel-heading">
+        <p class="panel-kicker">course condition</p>
+        <h2 id="outside-title">外界</h2>
+      </div>
+      <div class="instrument-grid">
+        <label class="instrument"><span>時刻</span><output id="clock-output">--:--</output></label>
+        <label class="instrument"><span>日付</span><output id="date-output">----</output></label>
+        <label class="instrument"><span>天気</span><input type="text" data-store="outside.weather" placeholder="晴れ / 雨 / 未確認"></label>
+        <label class="instrument"><span>六曜</span>
+          <select data-store="outside.rokuyo">
+            <option value="">未確認</option>
+            <option>先勝</option><option>友引</option><option>先負</option>
+            <option>仏滅</option><option>大安</option><option>赤口</option>
+          </select>
+        </label>
+        <label class="instrument wide"><span>外界メモ</span><textarea data-store="outside.memo" rows="3" placeholder="気温、雨雲、外の明るさ、出てもよさそうか"></textarea></label>
+      </div>
+    </section>
+
+    <section class="cockpit-panel state-panel" aria-labelledby="state-title">
+      <div class="panel-heading">
+        <p class="panel-kicker">driver condition</p>
+        <h2 id="state-title">状態</h2>
+      </div>
+      <div class="instrument-grid">
+        <label class="instrument"><span>体調</span><input type="text" data-store="state.body" placeholder="普通 / 重い / 良い"></label>
+        <label class="instrument"><span>眠気</span>
+          <select data-store="state.sleepiness">
+            <option value="">未確認</option><option>低い</option><option>中</option><option>高い</option><option>寝ろ</option>
+          </select>
+        </label>
+        <label class="instrument"><span>空腹</span>
+          <select data-store="state.hunger">
+            <option value="">未確認</option><option>なし</option><option>少し</option><option>腹減り</option><option>まず食え</option>
+          </select>
+        </label>
+        <label class="instrument"><span>気分</span><input type="text" data-store="state.mood" placeholder="淡々 / 散る / 乗る"></label>
+        <label class="instrument wide"><span>状態メモ</span><textarea data-store="state.memo" rows="3" placeholder="いまの自分を1行で観測する"></textarea></label>
+      </div>
+    </section>
+
+    <section class="cockpit-panel move-panel" aria-labelledby="move-title">
+      <div class="panel-heading panel-heading-row">
+        <div>
+          <p class="panel-kicker">action buttons</p>
+          <h2 id="move-title">行動</h2>
+        </div>
+        <p class="panel-note">身体を動かすポジション。外出・買い物・帰還。</p>
+      </div>
+      <div class="action-grid">
+        <a class="action-card" href="https://www.google.com/maps/search/?api=1&query=%E6%9D%BE%E3%81%AE%E3%82%84" target="_blank" rel="noopener"><span>まつのや</span><small>低摩擦の外食ピット</small></a>
+        <a class="action-card" href="https://www.google.com/maps/dir/?api=1&travelmode=bicycling" target="_blank" rel="noopener"><span>チャリ</span><small>じてんしゃ起動</small></a>
+        <a class="action-card" href="https://www.google.com/maps/search/?api=1&query=%E3%82%B9%E3%83%BC%E3%83%91%E3%83%BC" target="_blank" rel="noopener"><span>スーパー</span><small>食料と観察</small></a>
+        <button class="action-card is-button" type="button" data-position="家に残る"><span>家</span><small>今日は動かず整える</small></button>
+      </div>
+      <label class="instrument wide cockpit-note"><span>行動メモ</span><textarea data-store="move.memo" rows="3" placeholder="出るなら始点と終点。終点は基本的に家。"></textarea></label>
+    </section>
+
+    <section class="cockpit-panel make-panel" aria-labelledby="make-title">
+      <div class="panel-heading panel-heading-row">
+        <div>
+          <p class="panel-kicker">publish / shelf</p>
+          <h2 id="make-title">制作</h2>
+        </div>
+        <p class="panel-note">棚に何かを置くポジション。行動とは混ぜない。</p>
+      </div>
+      <div class="action-grid">
+        <button class="action-card is-button" type="button" data-position="今日の1枚"><span>今日の1枚</span><small>画像＋短文の紙片</small></button>
+        <button class="action-card is-button" type="button" data-position="zaike log"><span>zaike log</span><small>軽い日次ログ</small></button>
+        <a class="action-card" href="https://github.com/taecoshida/okitegami" target="_blank" rel="noopener"><span>GitHub</span><small>棚の保管庫</small></a>
+        <a class="action-card" href="../dashboard/"><span>dashboard</span><small>接続カード棚</small></a>
+      </div>
+      <label class="instrument wide cockpit-note"><span>制作メモ</span><textarea data-store="make.memo" rows="3" placeholder="何を出すか。出さない判断もOK。"></textarea></label>
+    </section>
+
+    <section class="cockpit-panel close-panel" aria-labelledby="close-title">
+      <div class="panel-heading panel-heading-row">
+        <div>
+          <p class="panel-kicker">pit in / garage</p>
+          <h2 id="close-title">店じまい</h2>
+        </div>
+        <p class="panel-note">生活ディーリングルームを閉じる。深夜営業しない。</p>
+      </div>
+      <div class="close-grid">
+        <label><input type="checkbox" data-store="close.meal"> 飯</label>
+        <label><input type="checkbox" data-store="close.bath"> 風呂</label>
+        <label><input type="checkbox" data-store="close.light"> 照明を落とす</label>
+        <label><input type="checkbox" data-store="close.start"> 明日の始点</label>
+      </div>
+      <label class="instrument wide cockpit-note"><span>明日の始点</span><textarea data-store="close.memo" rows="3" placeholder="戻って寝ることで、明日の始点を更新する。"></textarea></label>
+    </section>
+
+    <section class="cockpit-panel command-panel" aria-labelledby="command-title">
+      <div class="panel-heading panel-heading-row">
+        <div>
+          <p class="panel-kicker">one line question</p>
+          <h2 id="command-title">command</h2>
+        </div>
+        <button id="reset-button" type="button">今日の入力を消す</button>
+      </div>
+      <p class="command-question">いま取るべきポジションは、外へ出る・家に残る・何かを置く・店じまいする、のどれか？</p>
+      <p id="position-output" class="position-output">未選択</p>
+    </section>
+  </main>
+
+  <footer class="cockpit-footer">
+    <p>cockpit / one screen, five zones</p>
+  </footer>
+
+  <script src="cockpit.js"></script>
+</body>
+</html>
