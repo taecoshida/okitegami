@@ -34,7 +34,8 @@ body {
 .dashboard-links a,
 .app-link,
 .route-buttons a,
-.status-switch {
+.status-switch,
+.deck-order-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -79,6 +80,29 @@ body {
   grid-template-columns: minmax(180px,.42fr) minmax(0,1fr);
   gap: 16px;
   align-items: end;
+}
+
+.deck-order-control {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.deck-order-control .panel-note {
+  flex: 1 1 280px;
+  margin: 0;
+}
+
+.deck-order-button {
+  cursor: pointer;
+  font-weight: 650;
+}
+
+.deck-order-button:hover {
+  background: rgba(255,255,255,.96);
+  border-color: rgba(50,45,38,.25);
 }
 
 .panel-kicker {
