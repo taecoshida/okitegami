@@ -64,14 +64,6 @@ okitegami/
 
 画像なしの場合は `image: ""` にします。
 
-## dashboard
-
-`dashboard/` は、表ページからはリンクしない制御室です。
-
-- 表示：`dashboard/index.html`
-- データ：`dashboard/data/`
-- 共通設定：`data/site-config.js`
-
 ## zaike feed
 
 `zaike-feed/` は、天気を生活判断に使える形で置いておくための小さな外界アンテナです。
