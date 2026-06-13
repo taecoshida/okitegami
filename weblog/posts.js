@@ -1,5 +1,13 @@
 const weblogPosts = [
   {
+    date: "2026-06-13",
+    title: "生活の成立",
+    description: "以前は、外へ出ることで生活を成立させようとしていた。いまは、生活が成立したから外へ出られる。",
+    href: "2026-06-13-seikatsu-no-seiritsu.html",
+    image: "images/2026-06-13-seikatsu-no-seiritsu.png",
+    tags: ["weblog", "life", "walking", "outside"]
+  },
+  {
     date: "2026-06-08",
     title: "老成寺と少年神社",
     description: "老成寺に住み、少年神社へ散歩する。座れるけど、まだ押せる。",
