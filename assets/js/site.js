@@ -27,18 +27,21 @@ function renderEntry(entry) {
   const date = escapeHtml(entry.date || "");
   const text = escapeHtml(entry.text || "");
   const image = entry.image ? `<img src="${escapeHtml(entry.image)}" alt="${title}">` : "";
-  const dateMarkup = entry.date === featuredDate ? "" : `<p class="date">${date}</p>`;
+  const isFeatured = entry.date === featuredDate;
+  const topDateMarkup = isFeatured ? "" : `<p class="date">${date}</p>`;
+  const bottomDateMarkup = isFeatured ? `<p class="date featured-date">${date}</p>` : "";
   const tags = Array.isArray(entry.tags) && entry.tags.length
     ? `<div class="tags">${entry.tags.map((tag) => `<span class="tag">${escapeHtml(tag)}</span>`).join("")}</div>`
     : "";
 
   return `
-    <article class="entry ${image ? "" : "no-image"}">
-      ${dateMarkup}
+    <article class="entry ${image ? "" : "no-image"} ${isFeatured ? "featured-entry" : ""}">
+      ${topDateMarkup}
       ${image}
       <h2>${title}</h2>
       <p class="body-text">${text}</p>
       ${tags}
+      ${bottomDateMarkup}
     </article>
   `;
 }
