@@ -4,7 +4,13 @@ const prevEntryButton = document.querySelector("#prev-entry");
 const nextEntryButton = document.querySelector("#next-entry");
 
 // entries.js は「新しいものを先頭に足す」運用にする。
-// トップページでは、常に1枚だけ表示して、ボタンで前後にめくる。
+// トップページでは、設定された1枚を先頭に置き、残りは元の日付順でめくる。
+const featuredDate = window.OKITEGAMI_CONFIG?.featuredDate || "";
+const featuredEntry = entries.find((entry) => entry.date === featuredDate);
+const displayEntries = featuredEntry
+  ? [featuredEntry, ...entries.filter((entry) => entry !== featuredEntry)]
+  : entries;
+
 let currentIndex = 0;
 
 function escapeHtml(value) {
@@ -37,19 +43,19 @@ function renderEntry(entry) {
 }
 
 function normalizeIndex() {
-  if (!Array.isArray(entries) || entries.length === 0) return;
+  if (!Array.isArray(displayEntries) || displayEntries.length === 0) return;
 
   if (currentIndex < 0) {
-    currentIndex = entries.length - 1;
+    currentIndex = displayEntries.length - 1;
   }
 
-  if (currentIndex >= entries.length) {
+  if (currentIndex >= displayEntries.length) {
     currentIndex = 0;
   }
 }
 
 function renderEntries() {
-  if (!Array.isArray(entries) || entries.length === 0) {
+  if (!Array.isArray(displayEntries) || displayEntries.length === 0) {
     entriesContainer.innerHTML = '<p class="empty">まだ置き手紙がありません。</p>';
     entryCount.textContent = "0 entries";
     prevEntryButton.disabled = true;
@@ -59,10 +65,10 @@ function renderEntries() {
 
   normalizeIndex();
 
-  entriesContainer.innerHTML = renderEntry(entries[currentIndex]);
-  entryCount.textContent = `${currentIndex + 1} / ${entries.length}`;
+  entriesContainer.innerHTML = renderEntry(displayEntries[currentIndex]);
+  entryCount.textContent = `${currentIndex + 1} / ${displayEntries.length}`;
 
-  const hasMultipleEntries = entries.length > 1;
+  const hasMultipleEntries = displayEntries.length > 1;
   prevEntryButton.disabled = !hasMultipleEntries;
   nextEntryButton.disabled = !hasMultipleEntries;
 }
