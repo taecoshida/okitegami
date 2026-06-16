@@ -27,7 +27,7 @@ function renderEntry(entry) {
   const date = escapeHtml(entry.date || "");
   const text = escapeHtml(entry.text || "");
   const image = entry.image ? `<img src="${escapeHtml(entry.image)}" alt="${title}">` : "";
-  const dateMarkup = entry.date === "2026-05-30" ? "" : `<p class="date">${date}</p>`;
+  const dateMarkup = entry.date === featuredDate ? "" : `<p class="date">${date}</p>`;
   const tags = Array.isArray(entry.tags) && entry.tags.length
     ? `<div class="tags">${entry.tags.map((tag) => `<span class="tag">${escapeHtml(tag)}</span>`).join("")}</div>`
     : "";
