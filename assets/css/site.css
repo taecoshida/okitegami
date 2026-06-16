@@ -292,6 +292,11 @@ a {
   letter-spacing: 0.08em;
 }
 
+.featured-date {
+  margin: 20px 0 0;
+  text-align: right;
+}
+
 .entry h2 {
   margin: 20px 0 8px;
   font-size: 1.35rem;
