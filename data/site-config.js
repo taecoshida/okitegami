@@ -3,7 +3,7 @@ window.OKITEGAMI_CONFIG = {
   mode: "public",
   dashboardPath: "dashboard/",
   entriesSource: "data/entries.js",
-  featuredDate: "2026-06-09",
+  featuredDate: "2026-05-30",
   weather: {
     enabled: true,
     script: "assets/js/top-weather.js",
